@@ -10,11 +10,11 @@ void solution(std::string message, std::string &sp)
 		int end = message.find('\r', begin);
 		if (end == -1) {
 			if (begin != message.size())
-				sp = message.substr(begin, message.size() - begin);
+				sp = message.substr(begin, message.size() - begin - 1);
 			break;
 		}
 
-		std::string curr = message.substr(begin, end - begin);
+		std::string curr = message.substr(begin, end - begin - 1);
 
 		if (sp.size() && begin == 0)
 			curr = sp + curr;
@@ -22,17 +22,15 @@ void solution(std::string message, std::string &sp)
 		// Extract stock name
 		int idx = curr.find(' ');
 		std::string stock_name = message.substr(0, idx - 1);
-		begin = idx + 1;
 
 		// Extract amount
-		idx = message.find(' ', begin);
-		std::string amountstr = message.substr(begin, idx - begin);
+		idx = curr.find(' ', idx + 1);
+		std::string amountstr = message.substr(begin, idx - begin - 1);
 		int amount = std::stoi(amountstr);
-		begin = idx + 1;
 
 		// Extract buy/sell type
-		idx = message.find('#', begin);
-		std::string buy_sell = message.substr(begin, idx - begin);
+		idx = message.find('#', idx + 1);
+		std::string buy_sell = message.substr(begin, idx - begin - 1);
 
 		if (!last_trade.contains(stock_name)) {
 			last_trade[stock_name] = amount;
