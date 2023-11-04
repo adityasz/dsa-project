@@ -17,7 +17,6 @@ int main()
 		// i++;
 		std::string message = rcv.readIML();
 		solution(message, sp);
-		// std::cerr << i << "\n";
 		// std::cout << i << "\n" << message;
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
