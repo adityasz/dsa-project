@@ -1,0 +1,4 @@
+Fix amount string
+Move maps to main function and pass them as reference to solution function
+Fix last input sometimes not recognized
+Fix carriage return/line feed problems

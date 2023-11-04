@@ -8,7 +8,6 @@ void solution(std::string message, std::string &sp)
 	int begin = 0;
 	int hello = 0;
 	while (true) {
-		// std::cout << ++hello << " ";
 		int end = message.find('\r', begin);
 		if (end == -1) {
 			if (begin != message.size())
@@ -39,6 +38,7 @@ void solution(std::string message, std::string &sp)
 		j = message.find('#', i);
 		std::string buy_sell = curr.substr(i, j - i);
 
+		// TODO: fix amount string
 		std::cerr << "Stock name: " << stock_name << ", amount: " << amountstr << ", buy/sell: " << buy_sell << "\n";
 
 		if (!last_trade.contains(stock_name)) {
@@ -91,43 +91,6 @@ void solution(std::string message, std::string &sp)
 			}
 		}
 
-		// if (buy_sell == "b") {
-		// 	if (alive_buy[stock_name] != -1 && alive_buy[stock_name] >= amount) {
-		// 		std::cout << "No Trade\r\n";
-		// 	} else if (alive_sell[stock_name] != -1 && alive_sell[stock_name] == amount) {
-		// 		alive_buy[stock_name] = -1;
-		// 		alive_sell[stock_name] = -1;
-		// 		std::cout << "No Trade\r\n";
-		// 	} else {
-		// 		alive_buy[stock_name] = -1;
-		// 		if (amount > last_trade[stock_name]) {
-		// 			std::cout << stock_name << " " << amount << " " << "s" << "\r\n";
-		// 			last_trade[stock_name] = amount;
-		// 		} else {
-		// 			std::cout << "No Trade\r\n";
-		// 			alive_buy[stock_name] = amount;
-		// 		}
-		// 	}
-		// } else {
-		// 	if (alive_sell[stock_name] != -1 && alive_sell[stock_name] <= amount) {
-		// 		std::cout << "No Trade\r\n";
-		// 	} else if (alive_buy[stock_name] != -1 && alive_buy[stock_name] == amount) {
-		// 		alive_buy[stock_name] = -1;
-		// 		alive_sell[stock_name] = -1;
-		// 		std::cout << "No Trade\r\n";
-		// 	} else {
-		// 		alive_sell[stock_name] = -1;
-		// 		if (amount < last_trade[stock_name]) {
-		// 			std::cout << stock_name << " " << amount << " " << "b" << "\r\n";
-		// 			last_trade[stock_name] = amount;
-		// 		} else {
-		// 			std::cout << "No Trade\r\n";
-		// 			alive_sell[stock_name] = amount;
-		// 		}
-		// 	}
-		// }
-
 		begin = end + 1;
-		std::cerr << "Yaha pahaunch gaya\n";
 	}
 }
