@@ -7,7 +7,7 @@ all: trader iml
 traders: trader.cpp receiver.h
 	g++ -std=c++20 trader.cpp -o trader
 
-sc: iml.cpp
+socket: iml.cpp
 	g++ -std=c++20 iml.cpp -o iml
 
 1: iml trader

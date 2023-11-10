@@ -4,16 +4,17 @@ void solution(std::string message, std::string &sp,
               std::unordered_map<std::string, int> &alive_sell)
 {
 	int begin = 0;
-	int hello = 0;
 	while (true) {
-		int end = message.find('\r', begin);
+		int end = message.find('#', begin);
 		if (end == -1) {
 			if (begin != message.size())
 				sp = message.substr(begin, message.size() - begin - 1);
 			break;
 		}
 
-		std::string curr = message.substr(begin, end - begin - 1);
+		assert(end - begin - 1 < message.size());
+		std::string curr = message.substr(begin, end - begin);
+		std::cerr << "===" << "\n";
 		std::cerr << curr << "\n";
 
 		if (sp.size() && begin == 0)
@@ -22,22 +23,28 @@ void solution(std::string message, std::string &sp,
 		// Extract stock name
 		int i = 0;
 		int j = curr.find(' ');
+		assert(j - i - 1 < curr.size());
 		std::string stock_name = curr.substr(i, j);
-		i = j + 1;
 
 		// Extract amount
-		j = curr.find(' ', i);
-		// std::string amountstr = curr.substr(begin, idx - begin - 1);
-		std::string amountstr = curr.substr(i, j);
-		int amount = std::stoi(amountstr);
 		i = j + 1;
+		j = curr.find(' ', i);
+		assert(j - i - 1 < curr.size());
+		std::string amountstr = curr.substr(i, j - i);
+		int amount = std::stoi(amountstr);
 
 		// Extract buy/sell type
-		j = message.find('#', i);
+		i = j + 1;
+		j = curr.find('#', i);
+		std::cerr << "i = " << i << "\n";
+		std::cerr << "j = " << j << "\n";
+		std::cerr << "size = " << curr.size() << "\n";
+		assert(j - i - 1 < curr.size());
 		std::string buy_sell = curr.substr(i, j - i);
 
 		// TODO: fix amount string
-		std::cerr << "Stock name: " << stock_name << ", amount: " << amountstr << ", buy/sell: " << buy_sell << "\n";
+		std::cerr << "Stock name: " << stock_name << ", amount: "
+		          << amountstr << ", buy/sell: " << buy_sell << "\n";
 
 		if (!last_trade.contains(stock_name)) {
 			last_trade[stock_name] = amount;
@@ -89,6 +96,6 @@ void solution(std::string message, std::string &sp,
 			}
 		}
 
-		begin = end + 1;
+		begin = end + 2;
 	}
 }
