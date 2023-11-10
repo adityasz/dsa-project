@@ -8,11 +8,11 @@ void solution(std::string message, std::string &sp,
 		int end = message.find('#', begin);
 		if (end == -1) {
 			if (begin != message.size())
-				sp = message.substr(begin, message.size() - begin - 1);
+				sp = message.substr(begin, message.size() - begin);
 			break;
 		}
 
-		std::string curr = message.substr(begin, end - begin);
+		std::string curr = message.substr(begin, end - begin + 1);
 		std::cerr << "===" << "\n";
 		std::cerr << curr << "\n";
 
@@ -22,7 +22,7 @@ void solution(std::string message, std::string &sp,
 		// Extract stock name
 		int i = 0;
 		int j = curr.find(' ');
-		std::string stock_name = curr.substr(i, j);
+		std::string stock_name = curr.substr(i, j - i);
 
 		// Extract amount
 		i = j + 1;
