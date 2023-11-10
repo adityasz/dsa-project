@@ -12,7 +12,6 @@ void solution(std::string message, std::string &sp,
 			break;
 		}
 
-		assert(end - begin - 1 < message.size());
 		std::string curr = message.substr(begin, end - begin);
 		std::cerr << "===" << "\n";
 		std::cerr << curr << "\n";
@@ -23,13 +22,11 @@ void solution(std::string message, std::string &sp,
 		// Extract stock name
 		int i = 0;
 		int j = curr.find(' ');
-		assert(j - i - 1 < curr.size());
 		std::string stock_name = curr.substr(i, j);
 
 		// Extract amount
 		i = j + 1;
 		j = curr.find(' ', i);
-		assert(j - i - 1 < curr.size());
 		std::string amountstr = curr.substr(i, j - i);
 		int amount = std::stoi(amountstr);
 
@@ -39,7 +36,6 @@ void solution(std::string message, std::string &sp,
 		std::cerr << "i = " << i << "\n";
 		std::cerr << "j = " << j << "\n";
 		std::cerr << "size = " << curr.size() << "\n";
-		assert(j - i - 1 < curr.size());
 		std::string buy_sell = curr.substr(i, j - i);
 
 		// TODO: fix amount string
