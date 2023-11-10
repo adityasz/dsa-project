@@ -18,21 +18,23 @@ int main()
 	std::unordered_map<std::string, int> alive_buy;
 	std::unordered_map<std::string, int> alive_sell;
 
-	// int i = 0;
+	int i = 0;
 
 	while (!input_end) {
 		std::string message = rcv.readIML();
 		solution(message, sp, last_trade, alive_buy, alive_sell);
 
-		// i++;
-		// std::cerr << "Iteration: " << i << "\n===\n";
-		// std::cerr << "Size: " << message.size() << "\n";
+		// TODO: Fix early termination
 
-		// for (int j = 0; j < message.size(); j++) {
-		// 	std::cerr << "\n" << j << ": " << message[j];
-		// }
-		// std::cerr << "\n";
-		// std::cerr << "\n===\n";
+		i++;
+		std::cerr << "Iteration: " << i << "\n===\n";
+		std::cerr << "Size: " << message.size() << "\n";
+
+		for (int j = 0; j < message.size(); j++) {
+			std::cerr << "\n" << j << ":\t" << int(message[j]) << "\t" << message[j];
+		}
+		std::cerr << "\n";
+		std::cerr << "\n===\n";
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();

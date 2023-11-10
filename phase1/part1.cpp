@@ -13,8 +13,8 @@ void solution(std::string message, std::string &sp,
 		}
 
 		std::string curr = message.substr(begin, end - begin + 1);
-		std::cerr << "===" << "\n";
-		std::cerr << curr << "\n";
+		std::cerr << "╭─────────────────────────────────────────────────────╮" << "\n";
+		std::cerr << "│" << curr << "\n";
 
 		if (sp.size() && begin == 0)
 			curr = sp + curr;
@@ -33,14 +33,12 @@ void solution(std::string message, std::string &sp,
 		// Extract buy/sell type
 		i = j + 1;
 		j = curr.find('#', i);
-		std::cerr << "i = " << i << "\n";
-		std::cerr << "j = " << j << "\n";
-		std::cerr << "size = " << curr.size() << "\n";
 		std::string buy_sell = curr.substr(i, j - i);
 
 		// TODO: fix amount string
-		std::cerr << "Stock name: " << stock_name << ", amount: "
-		          << amountstr << ", buy/sell: " << buy_sell << "\n";
+		std::cerr << "Stock name: " << stock_name
+		          << "\tAmount: "   << amountstr
+		          << "\tBuy/sell: " << buy_sell << "\n";
 
 		if (!last_trade.contains(stock_name)) {
 			last_trade[stock_name] = amount;
@@ -93,5 +91,7 @@ void solution(std::string message, std::string &sp,
 		}
 
 		begin = end + 2;
+		if (begin > message.size() - 1)
+			break;
 	}
 }

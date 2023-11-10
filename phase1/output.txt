@@ -1,274 +1,261 @@
 Receiver is listening on port 8888
-1_A 300 b
-2_A 250 b
-3_A 200 s
-4_A 300 s
-5_A 100 b
-6_A 200 b
-7_B 10 s
-8_A 300 b
-9_A 300 b
-10_A 300 b
-11_A 300 b
-12_A 300 b
-13_A 300 b
-14_A 300 b
-15_A 300 b
-16_A 300 b
-17_A 300 b
-18_A 300 b
-19_A 300 b
-20_A 300 b
-21_A 300 b
-22_A 300 b
-23_A 300 b
-24_A 300 b
-25_A 300 b
-26_A 300 b
-27_A 300 b
-28_A 300 b
-29_A 300 b
-30_A 300 b
-31_A 300 b
-32_A 300 b
-33_A 300 b
-34_A 300 b
-35_A 300 b
-36_A 300 b
-37_A 300 b
-38_A 250 b
-39_A 200 s
-40_A 300 s
-41_A 100 b
-42_A 200 b
-43_B 10 s
-44_A 250 b
-45_A 200 s
-46_A 300 s
-47_A 100 b
-48_A 200 b
-49_B 10 s
-50_A 250 b
-51_A 200 s
-52_A 300 s
-53_A 100 b
-54_A 200 b
-55_B 10 s
-56_A 250 b
-57_A 200 s
-58_A 300 s
-59_A 100 b
-60_A 200 b
-61_B 10 s
-62_A 250 b
-63_A 200 s
-64_A 300 s
-65_A 100 b
-66_A 200 b
-67_B 10 s
-68_A 250 b
-69_A 200 s
-70_A 300 s
-71_A 100 b
-72_A 200 b
-73_B 10 s
-74_A 250 b
-75_A 200 s
-76_A 300 s
-77_A 100 b
-78_A 200 b
-79_B 10 s
-80_A 250 b
-81_A 200 s
-82_A 300 s
-83_A 100 b
-84_A 200 b
-85_B 10 s
-86_A 250 b
-87_A 200 s
-88_A 300 s
-89_A 100 b
-90_A 200 b
-91_B 10 s
-92_A 250 b
-93_A 200 s
-94_A 300 s
-95_A 100 b
-96_A 200 b
-97_B 10 s
-98_A 250 b
-99_A 200 s
-100_A 300 s
-101_A 100 b
-102_A 200 b
-103_B 10 s
-104_A 250 b
-105_A 200 s
-106_A 300 s
-107_A 100 b
-108_A 200 b
-109_B 10 s
-110_A 250 b
-111_A 200 s
-112_A 300 s
-113_A 100 b
-114_A 200 b
-115_B 10 s
-116_A 250 b
-117_A 200 s
-118_A 300 s
-119_A 100 b
-120_A 200 b
-121_B 10 s
-122_A 250 b
-123_A 200 s
-124_A 300 s
-125_A 100 b
-126_A 200 b
-127_B 10 s
-128_A 250 b
-129_A 200 s
-130_A 300 s
-131_A 100 b
-132_A 200 b
-133_B 10 s
-134_A 250 b
-135_A 200 s
-136_A 300 s
-137_A 100 b
-138_A 200 b
-139_B 10 s
-140_A 250 b
-141_A 200 s
-142_A 300 s
-143_A 100 b
-144_A 200 b
-145_B 10 s
-146_A 250 b
-147_A 200 s
-148_A 300 s
-149_A 100 b
-150_A 200 b
-151_B 10 s
-152_A 250 b
-153_A 200 s
-154_A 300 s
-155_A 100 b
-156_A 200 b
-157_B 10 s
-158_A 250 b
-159_A 200 s
-160_A 300 s
-161_A 100 b
-162_A 200 b
-163_B 10 s
-164_A 250 b
-165_A 200 s
-166_A 300 s
-167_A 100 b
-168_A 200 b
-169_B 10 s
-170_A 250 b
-171_A 200 s
-172_A 300 s
-173_A 100 b
-174_A 200 b
-175_B 10 s
-176_A 250 b
-177_A 200 s
-178_A 300 s
-179_A 100 b
-180_A 200 b
-181_B 10 s
-182_A 250 b
-183_A 200 s
-184_A 300 s
-185_A 100 b
-186_A 200 b
-187_B 10 s
-188_A 250 b
-189_A 200 s
-190_A 300 s
-191_A 100 b
-192_A 200 b
-193_B 10 s
-194_A 250 b
-195_A 200 s
-196_A 300 s
-197_A 100 b
-198_A 200 b
-199_B 10 s
-200_A 250 b
-201_A 200 s
-202_A 300 s
-203_A 100 b
-204_A 200 b
-205_B 10 s
-206_A 250 b
-207_A 200 s
-208_A 300 s
-209_A 100 b
-210_A 200 b
-211_B 10 s
-212_A 250 b
-213_A 200 s
-214_A 300 s
-215_A 100 b
-216_A 200 b
-217_B 10 s
-218_A 300 b
-219_A 300 b
-220_A 300 b
-221_A 300 b
-222_A 300 b
-223_A 300 b
-224_A 300 b
-225_A 300 b
-226_A 250 b
-227_A 200 s
-228_A 300 s
-229_A 100 b
-230_A 200 b
-231_B 10 s
-232_A 250 b
-233_A 200 s
-234_A 300 s
-235_A 100 b
-236_A 200 b
-237_B 10 s
-238_A 250 b
-239_A 200 s
-240_A 300 s
-241_A 100 b
-242_A 200 b
-243_B 10 s
-244_A 250 b
-245_A 200 s
-246_A 300 s
-247_A 100 b
-168_A248_A 200 b
-249_B 10 s
-250_A 250 b
-251_A 200 s
-252_A 300 s
-253_A 100 b
-254_A 200 b
-255_B 10 s
-256_A 250 b
-257_A 200 s
-258_A 300 s
-259_A 100 b
-260_A 200 b
-261_B 10 s
-262_A 250 b
-263_A 200 s
-264_A 300 s
-265_A 100 b
-266_A 200 b
-267_B 10 s
-268_A 250 b
-269_A 200 s
-270_A 300 s
-271_A 100 b
-272_A 200 b
-273_B 10 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+No Trade
+No Trade
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
+ASML 80 b
+No Trade
+ASML 70 b
+ASML 100 s
