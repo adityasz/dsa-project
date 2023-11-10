@@ -1,10 +1,8 @@
-void solution(std::string message, std::string &sp)
+void solution(std::string message, std::string &sp,
+              std::unordered_map<std::string, int> &last_trade,
+              std::unordered_map<std::string, int> &alive_buy,
+              std::unordered_map<std::string, int> &alive_sell)
 {
-	// TODO: this doesn't keep track of trades across messages
-	std::unordered_map<std::string, int> last_trade;
-	std::unordered_map<std::string, int> alive_buy;
-	std::unordered_map<std::string, int> alive_sell;
-
 	int begin = 0;
 	int hello = 0;
 	while (true) {

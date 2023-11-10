@@ -13,10 +13,13 @@ int main()
 	bool input_end = false;
 	// int i = 0;
 	std::string sp = "";
+	std::unordered_map<std::string, int> last_trade;
+	std::unordered_map<std::string, int> alive_buy;
+	std::unordered_map<std::string, int> alive_sell;
 	while (!input_end) {
 		// i++;
 		std::string message = rcv.readIML();
-		solution(message, sp);
+		solution(message, sp, last_trade, alive_buy, alive_sell);
 		// std::cout << i << "\n" << message;
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
