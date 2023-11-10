@@ -11,19 +11,32 @@ int main()
 	// sleep(5);
 	// std::string message = rcv.readIML();
 	// std::cout << message;
+
 	bool input_end = false;
-	// int i = 0;
 	std::string sp = "";
 	std::unordered_map<std::string, int> last_trade;
 	std::unordered_map<std::string, int> alive_buy;
 	std::unordered_map<std::string, int> alive_sell;
+
+	// int i = 0;
+
 	while (!input_end) {
-		// i++;
 		std::string message = rcv.readIML();
 		solution(message, sp, last_trade, alive_buy, alive_sell);
-		// std::cout << i << "\n" << message;
+
+		// i++;
+		// std::cerr << "Iteration: " << i << "\n===\n";
+		// std::cerr << "Size: " << message.size() << "\n";
+
+		// for (int j = 0; j < message.size(); j++) {
+		// 	std::cerr << "\n" << j << ": " << message[j];
+		// }
+		// std::cerr << "\n";
+		// std::cerr << "\n===\n";
+
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
+			std::cerr << "Hello\n";
 			input_end = true;
 		}
 	}
