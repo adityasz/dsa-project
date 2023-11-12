@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
 	Receiver rcv;
-	// FIXME
+	// FIXME: doesn't work with sleep(5)
 	// sleep(5);
 
 	if (argc != 2)
