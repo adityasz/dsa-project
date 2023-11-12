@@ -28,3 +28,7 @@ cscope.out
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+phase1/trader
+phase1/iml
+phase1/output.txt
