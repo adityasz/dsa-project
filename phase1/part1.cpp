@@ -1,6 +1,6 @@
 #define INVALID -9223372036854775807
 
-void part_1_sol(std::string message, std::string &sp,
+void part_1_sol(std::string &message, std::string &sp,
                 std::unordered_map<std::string, long long> &last_trade,
                 std::unordered_map<std::string, long long> &alive_buy,
                 std::unordered_map<std::string, long long> &alive_sell)

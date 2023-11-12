@@ -1,5 +1,4 @@
 #include <string>
-#include <cassert>
 #include <unordered_map>
 
 #include "receiver.h"
