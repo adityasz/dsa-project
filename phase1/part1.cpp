@@ -1,7 +1,7 @@
-void solution(std::string message, std::string &sp,
-              std::unordered_map<std::string, int> &last_trade,
-              std::unordered_map<std::string, int> &alive_buy,
-              std::unordered_map<std::string, int> &alive_sell)
+void part_1_sol(std::string message, std::string &sp,
+                std::unordered_map<std::string, int> &last_trade,
+                std::unordered_map<std::string, int> &alive_buy,
+                std::unordered_map<std::string, int> &alive_sell)
 {
 	int begin = 0;
 	while (true) {
@@ -93,5 +93,25 @@ void solution(std::string message, std::string &sp,
 		begin = end + 2;
 		if (begin > message.size() - 1)
 			break;
+	}
+}
+
+void part_1(Receiver rcv)
+{
+	bool input_end = false;
+	std::string sp = "";
+
+	std::unordered_map<std::string, int> last_trade;
+	std::unordered_map<std::string, int> alive_buy;
+	std::unordered_map<std::string, int> alive_sell;
+
+	while (!input_end) {
+		std::string message = rcv.readIML();
+		part_1_sol(message, sp, last_trade, alive_buy, alive_sell);
+
+		if (message.find('$') != std::string::npos) {
+			rcv.terminate();
+			input_end = true;
+		}
 	}
 }

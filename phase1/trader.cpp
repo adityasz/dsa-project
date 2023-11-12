@@ -4,43 +4,29 @@
 
 #include "receiver.h"
 #include "part1.cpp"
+#include "part2.cpp"
+#include "part3.cpp"
 
-int main()
+int main(int argc, char *argv[])
 {
 	Receiver rcv;
+	// FIXME
 	// sleep(5);
-	// std::string message = rcv.readIML();
-	// std::cout << message;
 
-	bool input_end = false;
-	std::string sp = "";
-	std::unordered_map<std::string, int> last_trade;
-	std::unordered_map<std::string, int> alive_buy;
-	std::unordered_map<std::string, int> alive_sell;
+	if (argc != 2)
+		return 0xdead;
 
-	int i = 0;
-
-	while (!input_end) {
-		std::string message = rcv.readIML();
-		solution(message, sp, last_trade, alive_buy, alive_sell);
-
-		// TODO: Fix early termination
-
-		i++;
-		std::cerr << "Iteration: " << i << "\n===\n";
-		std::cerr << "Size: " << message.size() << "\n";
-
-		for (int j = 0; j < message.size(); j++) {
-			std::cerr << "\n" << j << ":\t" << int(message[j]) << "\t" << message[j];
-		}
-		std::cerr << "\n";
-		std::cerr << "\n===\n";
-
-		if (message.find('$') != std::string::npos) {
-			rcv.terminate();
-			std::cerr << "Hello\n";
-			input_end = true;
-		}
+	switch (argv[1][0]) {
+	case '1':
+		part_1(rcv);
+		break;
+	case '2':
+		part_2(rcv);
+		break;
+	case '3':
+		part_3(rcv);
+		break;
 	}
+
 	return 0;
 }
