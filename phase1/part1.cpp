@@ -50,12 +50,8 @@ void part_1_sol(std::string message, std::string &sp,
 			alive_buy[stock_name] = INVALID;
 			alive_sell[stock_name] = INVALID;
 
-			if (buy_sell == 'b')
-				std::cout << stock_name << " " << amount
-				          << " " << 's' << "\r\n";
-			else
-				std::cout << stock_name << " " << amount
-				          << " " << 'b' << "\r\n";
+			std::cout << stock_name << " " << amount << " "
+			          << char('b' + 's' - buy_sell) << "\r\n";
 
 			begin = end + 2;
 			if (begin > message.size() - 1)
@@ -69,6 +65,7 @@ void part_1_sol(std::string message, std::string &sp,
 
 		if (buy_sell == 'b') {
 			if (ab != INVALID && ab >= amount) {
+				// TODO: Does the problem statement have this?
 				std::cout << "No Trade\r\n";
 			} else if (as == amount) {
 				ab = INVALID;
@@ -78,7 +75,7 @@ void part_1_sol(std::string message, std::string &sp,
 				ab = INVALID;
 				if (amount > prev) {
 					std::cout << stock_name << " " << amount
-					          << " " << "s" << "\r\n";
+					          << " " << 's' << "\r\n";
 					prev = amount;
 				} else {
 					std::cout << "No Trade\r\n";
@@ -87,6 +84,7 @@ void part_1_sol(std::string message, std::string &sp,
 			}
 		} else {
 			if (as != INVALID && as <= amount) {
+				// TODO: Does the problem statement have this?
 				std::cout << "No Trade\r\n";
 			} else if (ab == amount) {
 				ab = INVALID;
@@ -96,7 +94,7 @@ void part_1_sol(std::string message, std::string &sp,
 				as = INVALID;
 				if (amount < prev) {
 					std::cout << stock_name << " " << amount
-					          << " " << "b" << "\r\n";
+					          << " " << 'b' << "\r\n";
 					prev = amount;
 				} else {
 					std::cout << "No Trade\r\n";
