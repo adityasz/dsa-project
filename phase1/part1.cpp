@@ -28,14 +28,12 @@ void part_1_sol(std::string &message, std::string &sp,
 		int         idx = -1;
 
 		// Get stock name
-		while (curr[++idx] != ' ') {
+		while (curr[++idx] != ' ')
 			stock_name += curr[idx];
-		}
 
 		// Get amount
-		while (curr[++idx] != ' ') {
+		while (curr[++idx] != ' ')
 			amount_str += curr[idx];
-		}
 		amount = std::stoi(amount_str);
 
 		// Get buy/sell
