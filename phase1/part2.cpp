@@ -1,10 +1,25 @@
-void part_2_sol(std::string &message, std::string &sp)
+// TODO: Instead of returning powerset, find arbitrage...
+std::vector<std::vector<int>> powerset(std::vector<int> v)
 {
-	// Initialize to 64 to prevent frequent resize && copy operations
-	std::vector<std::unordered_map<std::string, long long>> quantities(64);
-	std::vector<std::pair<long long, char>>                 prices(64);
-	
-	int line = 0;
+	std::vector<std::vector<int>> powerset;
+	std::vector<int> emptyset;
+	powerset.push_back(emptyset);
+	for (int i = 0; i < v.size(); i++) {
+		std::vector<std::vector<int>> subsets = powerset;
+
+		for (int j = 0; j < subsets.size(); j++)
+			subsets[j].push_back(v[i]);
+
+		for (int j = 0; j < subsets.size(); j++)
+			powerset.push_back(subsets[j]);
+	}
+	return powerset;
+}
+
+void part_2_sol(std::string &message, std::string &sp, int &line,
+        std::vector<std::unordered_map<std::string, long long>> &quantities,
+        std::vector<std::pair<long long, char>>                 &prices)
+{
 	int begin = 0;
 	while (true) {
 		int end = message.find('#', begin);
@@ -68,9 +83,14 @@ void part_2(Receiver rcv)
 	bool input_end = false;
 	std::string sp = "";
 
+	// Initialize to 64 to prevent frequent resize && copy operations
+	std::vector<std::unordered_map<std::string, long long>> quantities(64);
+	std::vector<std::pair<long long, char>>                 prices(64);
+	int line = 0;
+
 	while (!input_end) {
 		std::string message = rcv.readIML();
-		part_2_sol(message, sp);
+		part_2_sol(message, sp, line, quantities, prices);
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
