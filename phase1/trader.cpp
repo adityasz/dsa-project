@@ -11,7 +11,7 @@
 #else
 #  define DEBUG_MSG(x)
 #  define __get_time(x)
-#  define __duration(x)
+#  define __duration(t, x, y)
 #endif
 
 #include "receiver.h"
