@@ -4,6 +4,16 @@
 
 #include <chrono>
 
+#ifdef DEBUG
+#  define DEBUG_MSG(x) std::cerr << x;
+#  define __get_time(x) auto x = std::chrono::steady_clock::now()
+#  define __duration(t, x, y) auto t = std::chrono::duration<double, std::milli> (y - x).count()
+#else
+#  define DEBUG_MSG(x)
+#  define __get_time(x)
+#  define __duration(x)
+#endif
+
 #include "receiver.h"
 #include "part1.cpp"
 #include "part2.cpp"
@@ -18,7 +28,7 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 		return 0xdead;
 
-	auto start = std::chrono::steady_clock::now();
+	__get_time(start);
 	switch (argv[1][0]) {
 	case '1':
 		part_1(rcv);
@@ -30,12 +40,10 @@ int main(int argc, char *argv[])
 		part_3(rcv);
 		break;
 	}
-	auto end = std::chrono::steady_clock::now();
+	__get_time(end);
 
-	auto 🛺 = end - start;
-	std::cerr << "Execution time: "
-	          << std::chrono::duration<double, std::milli> (🛺).count()
-	          << " ms\n";
+	__duration(🛺, start, end);
+	DEBUG_MSG("Execution time: " << 🛺 << " ms\n");
 
 	return 0;
 }

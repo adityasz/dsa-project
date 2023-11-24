@@ -15,8 +15,8 @@ void part_1_sol(std::string &message, std::string &sp,
 		}
 
 		std::string curr = message.substr(begin, end - begin + 1);
-		std::cerr << "───────────────────────────────────────────────────\n";
-		std::cerr << curr << "\n";
+		DEBUG_MSG("───────────────────────────────────────────────────\n");
+		DEBUG_MSG(curr << "\n");
 
 		if (sp.size() && begin == 0)
 			curr = sp + curr;
@@ -39,9 +39,9 @@ void part_1_sol(std::string &message, std::string &sp,
 		// Get buy/sell
 		buy_sell = curr[++idx];
 
-		std::cerr << "Stock name: " << stock_name
-		          << "\tAmount: "   << amount
-		          << "\tBuy/sell: " << buy_sell << "\n";
+		DEBUG_MSG("Stock name: " << stock_name
+		       << "\tAmount: "   << amount
+		       << "\tBuy/sell: " << buy_sell << "\n");
 
 		if (!last_trade.contains(stock_name)) {
 			last_trade[stock_name] = amount;
@@ -122,7 +122,7 @@ void part_1(Receiver rcv)
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
-			std::cerr << "───────────────────────────────────────────────────\n";
+			DEBUG_MSG("───────────────────────────────────────────────────\n");
 			input_end = true;
 		}
 	}

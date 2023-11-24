@@ -24,17 +24,17 @@ bool arbitrage(
 	std::vector<int> u(num_alive);
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
-	std::cerr << "Subsets:\n";
+	DEBUG_MSG("Subsets:\n");
 	for (auto subset : powerset(u)) {
 		std::unordered_map<std::string, long long> qty;
 		long long profit = 0;
 		subset.push_back(num_alive);
 
-		std::cerr << '\t';
+		DEBUG_MSG('\t');
 		for (auto x : subset) {
-			std::cerr << x << ' ';
+			DEBUG_MSG(x << ' ');
 		}
-		std::cerr << '\n';
+		DEBUG_MSG('\n');
 
 		for (auto idx : subset) {
 			for (auto it = quantities[idx].begin(); it != quantities[idx].end(); it++) {
@@ -76,8 +76,8 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		}
 		
 		std::string curr = message.substr(begin, end - begin + 1);
-		std::cerr << "───────────────────────────────────────────────────\n";
-		std::cerr << curr << "\n";
+		DEBUG_MSG("───────────────────────────────────────────────────\n");
+		DEBUG_MSG(curr << "\n");
 
 		if (sp.size() && begin == 0)
 			curr = sp + curr;
@@ -88,8 +88,8 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		int         idx = -1;
 		
 		// Get linear combination
-		std::cerr << "Line: " << num_alive << '\n';
-		std::cerr << "Stock\tQuantity\n";
+		DEBUG_MSG("Line: " << num_alive << '\n');
+		DEBUG_MSG("Stock\tQuantity\n");
 		do {
 			std::string stock_name;
 			std::string qty_str;
@@ -104,18 +104,18 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			
 			quantities[num_alive][stock_name] = quantity;
 
-			std::cerr << stock_name << '\t' << quantity << '\n';
+			DEBUG_MSG(stock_name << '\t' << quantity << '\n');
 		} while (curr[idx + 1] - '9' > 0);
 		
 		// Get price
 		while (curr[++idx] != ' ')
 			amount_str += curr[idx];
 		amount = std::stoi(amount_str);
-		std::cerr << "Price: " << amount << '\n';
+		DEBUG_MSG("Price: " << amount << '\n');
 
 		// Get buy/sell
 		buy_sell = curr[++idx];
-		std::cerr << "Buy/sell: " << buy_sell << '\n';
+		DEBUG_MSG("Buy/sell: " << buy_sell << '\n');
 		
 		prices[num_alive] = std::make_pair(amount, buy_sell);
 
@@ -167,7 +167,7 @@ void part_2(Receiver rcv)
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
-			std::cerr << "───────────────────────────────────────────────────\n";
+			DEBUG_MSG("───────────────────────────────────────────────────\n");
 			input_end = true;
 		}
 	}
