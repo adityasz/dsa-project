@@ -21,7 +21,7 @@ std::vector<std::vector<int>> powerset(std::vector<int> &v)
 
 bool arbitrage(
 	int num_alive,
-        std::vector<std::unordered_map<std::string, long long>> &quantities,
+        std::vector<std::unordered_map<std::string, long long>> &lin_combs,
         std::vector<std::pair<long long, char>> &prices,
 	std::vector<std::pair<std::vector<int>, int>> &arbitrages)
 {
@@ -30,7 +30,7 @@ bool arbitrage(
 		u[i] = i;
 	DEBUG_MSG("Subsets:\n");
 	for (auto subset : powerset(u)) {
-		std::unordered_map<std::string, long long> qty;
+		std::unordered_map<std::string, long long> lin_comb;
 		long long profit = 0;
 		subset.push_back(num_alive);
 
@@ -41,11 +41,11 @@ bool arbitrage(
 		DEBUG_MSG('\n');
 
 		for (auto idx : subset) {
-			for (auto it = quantities[idx].begin(); it != quantities[idx].end(); it++) {
+			for (auto it = lin_combs[idx].begin(); it != lin_combs[idx].end(); it++) {
 				if (prices[idx].second == 'b')
-					qty[it->first] += it->second;
+					lin_comb[it->first] += it->second;
 				else
-					qty[it->first] -= it->second;
+					lin_comb[it->first] -= it->second;
 			}
 			if (prices[idx].second == 'b')
 				profit += prices[idx].first;
@@ -53,7 +53,7 @@ bool arbitrage(
 				profit -= prices[idx].first;
 		}
 		bool flag = true;
-		for (auto it = qty.begin(); it != qty.end(); it++) {
+		for (auto it = lin_comb.begin(); it != lin_comb.end(); it++) {
 			if (it->second) {
 				flag = false;
 			}
@@ -67,7 +67,7 @@ bool arbitrage(
 }
 
 void part_2_sol(std::string &message, std::string &sp, int &num_alive,
-        std::vector<std::unordered_map<std::string, long long>> &quantities,
+        std::vector<std::unordered_map<std::string, long long>> &lin_combs,
         std::vector<std::pair<long long, char>> &prices)
 {
 	int begin = 0;
@@ -106,7 +106,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 				qty_str += curr[idx];
 			quantity = std::stoi(qty_str);
 			
-			quantities[num_alive][stock_name] = quantity;
+			lin_combs[num_alive][stock_name] = quantity;
 
 			DEBUG_MSG(stock_name << '\t' << quantity << '\n');
 		} while (curr[idx + 1] - '9' > 0);
@@ -124,7 +124,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		prices[num_alive] = std::make_pair(amount, buy_sell);
 
 		std::vector<std::pair<std::vector<int>, int>> arbitrages;
-		if (arbitrage(num_alive, quantities, prices, arbitrages)) {
+		if (arbitrage(num_alive, lin_combs, prices, arbitrages)) {
 			int idx =
 			        std::max_element(arbitrages.begin(),
 			                         arbitrages.end(),
@@ -132,8 +132,8 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			                         { return l.second < r.second; })
 			            - arbitrages.begin();
 			for (int i = arbitrages[idx].first.size() - 1; i >= 0; i--) {
-				for (auto it = quantities[arbitrages[idx].first[i]].begin();
-				     it != quantities[arbitrages[idx].first[i]].end(); it++) {
+				for (auto it = lin_combs[arbitrages[idx].first[i]].begin();
+				     it != lin_combs[arbitrages[idx].first[i]].end(); it++) {
 					std::cout << it->first << ' ' << it->second << ' ';
 				}
 				std::cout << prices[i].first << ' ';
@@ -141,7 +141,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			}
 			std::cout << arbitrages[idx].second << '\n';
 			for (auto x : arbitrages[idx].first) {
-				quantities.erase(quantities.begin() + x);
+				lin_combs.erase(lin_combs.begin() + x);
 				num_alive--;
 			}
 		} else {
@@ -161,13 +161,13 @@ void part_2(Receiver rcv)
 	std::string sp = "";
 
 	// Initialize to 64 to prevent frequent resize && copy operations
-	std::vector<std::unordered_map<std::string, long long>> quantities(64);
+	std::vector<std::unordered_map<std::string, long long>> lin_combs(64);
 	std::vector<std::pair<long long, char>>                 prices(64);
 	int num_alive = 0;
 
 	while (!input_end) {
 		std::string message = rcv.readIML();
-		part_2_sol(message, sp, num_alive, quantities, prices);
+		part_2_sol(message, sp, num_alive, lin_combs, prices);
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
