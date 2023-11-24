@@ -1,17 +1,21 @@
 #include <algorithm>
 
+void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
+		     std::vector<std::vector<int>> &powerset)
+{
+	powerset.push_back(subset);
+	for (int j = i; j < v.size(); j++) {
+		subset.push_back(v[j]);
+		powerset_helper(v, j + 1, subset, powerset);
+		subset.pop_back();
+	}
+}
+
 std::vector<std::vector<int>> powerset(std::vector<int> &v)
 {
-	unsigned int n = v.size();
-	std::vector<std::vector<int>> powerset(1 << n);
-	for (unsigned long long i = 0; i < static_cast<unsigned int>(1 << n); i++) {
-		std::vector<int> subset;
-		for (unsigned long long j = 0; j < n; j++) {
-			if (static_cast<unsigned long long>(i >> j) & 1)
-				subset.push_back(v[j]);
-		}
-		powerset[i] = subset;
-	}
+	std::vector<std::vector<int>> powerset;
+	std::vector<int> subset;
+	powerset_helper(v, 0, subset, powerset);
 	return powerset;
 }
 
@@ -88,7 +92,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		int         idx = -1;
 		
 		// Get linear combination
-		DEBUG_MSG("Line: " << num_alive << '\n');
+		DEBUG_MSG("Alive: " << num_alive << '\n');
 		DEBUG_MSG("Stock\tQuantity\n");
 		do {
 			std::string stock_name;
