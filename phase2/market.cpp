@@ -1,6 +1,6 @@
 #include "market.h"
 
-market::market(int argc, char** argv)
+market::market(int argc, char *argv[])
 {
 	
 }

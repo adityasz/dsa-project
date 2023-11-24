@@ -2,9 +2,9 @@
 #include <vector>
 #include <unordered_map>
 
-#include <chrono>
 
 #ifdef DEBUG
+#  include <chrono>
 #  define DEBUG_MSG(x) std::cerr << x;
 #  define __get_time(x) auto x = std::chrono::steady_clock::now()
 #  define __duration(t, x, y) auto t = std::chrono::duration<double, std::milli> (y - x).count()

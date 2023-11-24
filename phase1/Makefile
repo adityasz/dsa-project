@@ -2,15 +2,15 @@
 # Do not modify this file
 #------------------------
 
-all: trader iml
+all: traders socket
 
 traders: trader.cpp receiver.h
-	g++ -std=c++20 trader.cpp -o trader
+	g++ -std=c++20 trader.cpp -o trader -DDEBUG
 
 socket: iml.cpp
 	g++ -std=c++20 iml.cpp -o iml
 
-1: iml trader
+1: socket traders
 	./trader 1 > output.txt &
 	sleep 1
 	./iml inputs/data1.txt
@@ -18,15 +18,16 @@ socket: iml.cpp
 	@#mv temp_output.txt output.txt
 	@code --diff outputs/out1.txt output.txt
 
-test: iml trader
+test1: socket traders
+	python script.py 1
 	./trader 1 > output.txt &
 	sleep 1
 	./iml input.txt
 	@# tr '\r' '\n' < output.txt > temp_output.txt
 	@#mv temp_output.txt output.txt
-	@code --diff outputs/out1.txt output.txt
+	@cat output.txt
 
-2: iml trader
+2: socket traders
 	./trader 2 > output.txt &
 	sleep 1
 	./iml inputs/data2.txt
@@ -34,7 +35,16 @@ test: iml trader
 	@#mv temp_output.txt output.txt
 	@code --diff outputs/out2.txt output.txt
 
-3: iml trader
+test2: socket traders
+	python script.py 2
+	./trader 2 > output.txt &
+	sleep 1
+	./iml input.txt
+	@# tr '\r' '\n' < output.txt > temp_output.txt
+	@#mv temp_output.txt output.txt
+	@cat output.txt
+
+3: socket traders
 	./trader 3 > output.txt &
 	sleep 1
 	./iml inputs/data3.txt
