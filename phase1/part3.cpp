@@ -10,18 +10,37 @@ bool arbitrage(
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
 	DEBUG_MSG("Cycles:\n");
+
+	#ifdef DEBUG
+	int __count__ = 0;
+	bool __dots__ = true;
+	#endif
+
 	for (auto subset : powerset(u)) {
 		std::unordered_map<std::string, long long> lin_comb;
 		long long profit = 0;
 		subset.push_back(num_alive);
 
-		DEBUG_MSG('\t');
-		__print_vector(subset);
-		DEBUG_MSG('\n');
+		#ifdef DEBUG
+		if (__count__++ < 8) {
+			DEBUG_MSG('\t');
+			__print_vector(subset);
+			DEBUG_MSG('\n');
+		} else {
+			if (__dots__) {
+				DEBUG_MSG("\t...\n");
+				__dots__ = false;
+			}
+		}
+		#endif
 
 		long long num = 1;	// number of quantity combinations
 		for (auto idx : subset)
 			num *= lin_combs[idx].second;
+
+		#ifdef DEBUG
+		bool __flag__ = true;
+		#endif
 
 		for (int j = 0; j < num; j++) {
 			long long tmp = j;
@@ -32,9 +51,18 @@ bool arbitrage(
 				tmp /= lin_combs[subset[i]].second;
 			}
 
-			DEBUG_MSG("\t\tCombination " << j << ": ");
-			__print_vector(comb);
-			DEBUG_MSG('\n');
+			#ifdef DEBUG
+			if (j < 8) {
+				DEBUG_MSG("\t\tCombination " << j << ": ");
+				__print_vector(comb);
+				DEBUG_MSG('\n');
+			} else {
+				if (__flag__) {
+					DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
+					__flag__ = false;
+				}
+			}
+			#endif
 
 			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
 				for (auto it = lin_combs[*idx].first.begin();

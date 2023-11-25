@@ -29,14 +29,29 @@ bool arbitrage(
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
 	DEBUG_MSG("Cycles:\n");
+
+	#ifdef DEBUG
+	int __count__ = 0;
+	bool __dots__ = true;
+	#endif
+
 	for (auto subset : powerset(u)) {
 		std::unordered_map<std::string, long long> lin_comb;
 		long long profit = 0;
 		subset.push_back(num_alive);
 
-		DEBUG_MSG('\t');
-		__print_vector(subset);
-		DEBUG_MSG('\n');
+		#ifdef DEBUG
+		if (__count__++ < 8) {
+			DEBUG_MSG('\t');
+			__print_vector(subset);
+			DEBUG_MSG('\n');
+		} else {
+			if (__dots__) {
+				DEBUG_MSG("\t...\n");
+				__dots__ = false;
+			}
+		}
+		#endif
 
 		for (auto idx : subset) {
 			for (auto it = lin_combs[idx].begin(); it != lin_combs[idx].end(); it++) {
