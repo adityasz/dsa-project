@@ -44,10 +44,10 @@ bool arbitrage(
 
 		for (int j = 0; j < num; j++) {
 			long long tmp = j;
-			std::vector<int> comb;
+			std::vector<int> comb(subset.size());
 
 			for (int i = 0; i < subset.size(); i++) {
-				comb.push_back(1 + tmp % lin_combs[subset[i]].second);
+				comb[i] = 1 + tmp % lin_combs[subset[i]].second;
 				tmp /= lin_combs[subset[i]].second;
 			}
 
@@ -141,6 +141,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			
 			// Resize vectors if necessary
 			if (num_alive == lin_combs.size()) {
+				DEBUG_MSG("#### PANIC ####");
 				lin_combs.resize(2 * lin_combs.size());
 				prices.resize(2 * prices.size());
 			}

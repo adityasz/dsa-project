@@ -121,6 +121,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			
 			// Resize vectors if necessary
 			if (num_alive == lin_combs.size()) {
+				DEBUG_MSG("#### PANIC ####");
 				lin_combs.resize(2 * lin_combs.size());
 				prices.resize(2 * prices.size());
 			}
