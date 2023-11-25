@@ -35,11 +35,7 @@ bool arbitrage(
 		subset.push_back(num_alive);
 
 		DEBUG_MSG('\t');
-		#ifdef DEBUG
-		for (auto x : subset) {
-			DEBUG_MSG(x << ' ');
-		}
-		#endif
+		__print_vector(subset);
 		DEBUG_MSG('\n');
 
 		for (auto idx : subset) {
@@ -143,8 +139,11 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 				// Print traded orders
 				for (auto it = lin_combs[arbitrages[idx].first[i]].begin();
 				     it != lin_combs[arbitrages[idx].first[i]].end(); it++) {
+					DEBUG_MSG(it->first << ' ' << it->second << ' ');
 					std::cout << it->first << ' ' << it->second << ' ';
 				}
+				DEBUG_MSG(prices[i].first << ' ');
+				DEBUG_MSG(char('b' + 's' - prices[i].second) << "#\n");
 				std::cout << prices[i].first << ' ';
 				std::cout << char('b' + 's' - prices[i].second) << "#\n";
 
@@ -155,6 +154,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			}
 			profit += arbitrages[idx].second;
 		} else {
+			DEBUG_MSG("No Trade\n");
 			std::cout << "No Trade\n";
 		}
 

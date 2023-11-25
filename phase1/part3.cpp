@@ -1,4 +1,7 @@
+#include <algorithm>
+
 void part_3_sol();
+
 void part_3(Receiver rcv)
 {
 	bool input_end = false;
@@ -8,6 +11,7 @@ void part_3(Receiver rcv)
 	std::vector<std::unordered_map<std::string, long long>> lin_combs(64);
 	std::vector<std::pair<long long, char>>                 prices(64);
 	int num_alive = 0;
+	int profit    = 0;
 
 	while (!input_end) {
 		std::string message = rcv.readIML();
