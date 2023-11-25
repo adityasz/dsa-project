@@ -1,4 +1,4 @@
-#include <algorithm>
+#include "../stl/algorithm"
 
 void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
 		     std::vector<std::vector<int>> &powerset)
@@ -152,7 +152,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 				prices.erase(prices.begin() + arbitrages[idx].first[i]);
 				num_alive--;
 			}
-			DEBUG_MSG(profit);
+			DEBUG_MSG(profit << '\n');
 			profit += arbitrages[idx].second;
 		} else {
 			DEBUG_MSG("No Trade\n");
