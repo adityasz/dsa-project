@@ -52,6 +52,15 @@ test2: socket traders
 	@#mv temp_output.txt output.txt
 	@code --diff outputs/out3.txt output.txt
 
+test3: socket traders
+	python script.py 3
+	./trader 3 > output.txt &
+	sleep 1
+	./iml input.txt
+	@# tr '\r' '\n' < output.txt > temp_output.txt
+	@#mv temp_output.txt output.txt
+	@cat output.txt
+
 clean:
 	rm -rf output.txt trader iml
 	rm -rf *~

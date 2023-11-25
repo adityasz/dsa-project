@@ -19,19 +19,22 @@ bool arbitrage(
 		__print_vector(subset);
 		DEBUG_MSG('\n');
 
-		long long num = 1;
-		for (auto idx : subset) {
+		long long num = 1;	// number of quantity combinations
+		for (auto idx : subset)
 			num *= lin_combs[idx].second;
-		}
 
 		for (int j = 0; j < num; j++) {
 			long long tmp = j;
 			std::vector<int> comb;
 
 			for (int i = 0; i < subset.size(); i++) {
-				comb.push_back(tmp % lin_combs[subset[i]].second);
+				comb.push_back(1 + tmp % lin_combs[subset[i]].second);
 				tmp /= lin_combs[subset[i]].second;
 			}
+
+			DEBUG_MSG("\t\tCombination " << j << ": ");
+			__print_vector(comb);
+			DEBUG_MSG('\n');
 
 			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
 				for (auto it = lin_combs[*idx].first.begin();
@@ -130,6 +133,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			qty_str += curr[idx];
 		quantity = std::stoi(qty_str);
 		DEBUG_MSG("Quantity: " << quantity << '\n');
+		lin_combs[num_alive].second = quantity;
 
 		// Get buy/sell
 		buy_sell = curr[++idx];
@@ -167,7 +171,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 					num_alive--;
 				}
 			}
-			DEBUG_MSG(profit);
+			DEBUG_MSG("Profit: " << profit << '\n');
 			profit += arbitrages[idx].second;
 		} else {
 			DEBUG_MSG("No Trade\n");
@@ -198,6 +202,10 @@ void part_3(Receiver rcv)
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
+
+			// Print profit at end
+			std::cout << profit << '\n';
+
 			DEBUG_MSG("───────────────────────────────────────────────────\n");
 			input_end = true;
 		}
