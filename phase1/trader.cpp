@@ -2,7 +2,6 @@
 #include <vector>
 #include <unordered_map>
 
-
 #ifdef DEBUG
 #  include <chrono>
 #  define DEBUG_MSG(x) std::cerr << x;
