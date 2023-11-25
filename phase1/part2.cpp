@@ -152,6 +152,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 				prices.erase(prices.begin() + arbitrages[idx].first[i]);
 				num_alive--;
 			}
+			DEBUG_MSG(profit);
 			profit += arbitrages[idx].second;
 		} else {
 			DEBUG_MSG("No Trade\n");
