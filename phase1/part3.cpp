@@ -51,19 +51,6 @@ bool arbitrage(
 				tmp /= lin_combs[subset[i]].second;
 			}
 
-			#ifdef DEBUG
-			if (j < 8) {
-				DEBUG_MSG("\t\tCombination " << j << ": ");
-				__print_vector(comb);
-				DEBUG_MSG('\n');
-			} else {
-				if (__flag__) {
-					DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
-					__flag__ = false;
-				}
-			}
-			#endif
-
 			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
 				for (auto it = lin_combs[*idx].first.begin();
 					it != lin_combs[*idx].first.end(); it++) {
@@ -77,6 +64,19 @@ bool arbitrage(
 				else
 					profit -= comb[idx - subset.begin()] * prices[*idx].first;
 			}
+
+			#ifdef DEBUG
+			if (j < 8) {
+				DEBUG_MSG("\t\tCombination " << j << ": ");
+				__print_vector(comb);
+				DEBUG_MSG("\tProfit: " << profit << '\n');
+			} else {
+				if (__flag__) {
+					DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
+					__flag__ = false;
+				}
+			}
+			#endif
 
 			bool flag = true;
 			for (auto it = lin_comb.begin(); it != lin_comb.end(); it++) {
@@ -200,8 +200,8 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 					num_alive--;
 				}
 			}
-			DEBUG_MSG("Profit: " << profit << '\n');
 			profit += arbitrages[idx].second;
+			DEBUG_MSG("Profit: " << profit << '\n');
 		} else {
 			DEBUG_MSG("No Trade\n");
 			std::cout << "No Trade\n";
