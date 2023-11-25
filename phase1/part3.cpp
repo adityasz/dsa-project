@@ -1,24 +1,5 @@
 #include <algorithm>
 
-void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
-		     std::vector<std::vector<int>> &powerset)
-{
-	powerset.push_back(subset);
-	for (int j = i; j < v.size(); j++) {
-		subset.push_back(v[j]);
-		powerset_helper(v, j + 1, subset, powerset);
-		subset.pop_back();
-	}
-}
-
-std::vector<std::vector<int>> powerset(std::vector<int> &v)
-{
-	std::vector<std::vector<int>> powerset;
-	std::vector<int> subset;
-	powerset_helper(v, 0, subset, powerset);
-	return powerset;
-}
-
 bool arbitrage(
 	int num_alive,
         std::vector<std::pair<std::unordered_map<std::string, long long>, long long>> &lin_combs,
@@ -38,26 +19,48 @@ bool arbitrage(
 		__print_vector(subset);
 		DEBUG_MSG('\n');
 
+		long long num = 1;
 		for (auto idx : subset) {
-			for (auto it = lin_combs[idx].begin(); it != lin_combs[idx].end(); it++) {
-				if (prices[idx].second == 'b')
-					lin_comb[it->first] += it->second;
+			num *= lin_combs[idx].second;
+		}
+
+		for (int j = 0; j < num; j++) {
+			long long tmp = j;
+			std::vector<int> comb;
+
+			for (int i = 0; i < subset.size(); i++) {
+				comb.push_back(tmp % lin_combs[subset[i]].second);
+				tmp /= lin_combs[subset[i]].second;
+			}
+
+			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
+				for (auto it = lin_combs[*idx].first.begin();
+					it != lin_combs[*idx].first.end(); it++) {
+					if (prices[*idx].second == 'b')
+						lin_comb[it->first] += comb[idx - subset.begin()] * it->second;
+					else
+						lin_comb[it->first] -= comb[idx - subset.begin()] * it->second;
+				}
+				if (prices[*idx].second == 'b')
+					profit += comb[idx - subset.begin()] * prices[*idx].first;
 				else
-					lin_comb[it->first] -= it->second;
+					profit -= comb[idx - subset.begin()] * prices[*idx].first;
 			}
-			if (prices[idx].second == 'b')
-				profit += prices[idx].first;
-			else
-				profit -= prices[idx].first;
-		}
-		bool flag = true;
-		for (auto it = lin_comb.begin(); it != lin_comb.end(); it++) {
-			if (it->second) {
-				flag = false;
+
+			bool flag = true;
+			for (auto it = lin_comb.begin(); it != lin_comb.end(); it++) {
+				if (it->second) {
+					flag = false;
+				}
+			}
+			if (flag && profit > 0) {
+				std::vector<std::pair<int, long long>> v(subset.size());
+				for (int i = 0; i < subset.size(); i++) {
+					v[i] = std::make_pair(subset[i], comb[i]);
+				}
+				arbitrages.push_back(std::make_pair(v, profit));
 			}
 		}
-		if (flag && profit > 0)
-			arbitrages.push_back(std::make_pair(subset, profit));
 	}
 	if (arbitrages.size())
 		return true;
@@ -111,7 +114,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 				prices.resize(2 * prices.size());
 			}
 
-			lin_combs[num_alive][stock_name] = quantity;
+			lin_combs[num_alive].first[stock_name] = quantity;
 
 			DEBUG_MSG(stock_name << '\t' << quantity << '\n');
 		} while (curr[idx + 1] - '9' > 0);
@@ -157,9 +160,12 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 				std::cout << char('b' + 's' - prices[i].second) << "#\n";
 
 				// Remove traded orders
-				lin_combs.erase(lin_combs.begin() + arbitrages[idx].first[i]);
-				prices.erase(prices.begin() + arbitrages[idx].first[i]);
-				num_alive--;
+				lin_combs[arbitrages[idx].first[i].first].second -= arbitrages[idx].first[i].second;
+				if (lin_combs[arbitrages[idx].first[i].first].second == 0) {
+					lin_combs.erase(lin_combs.begin() + arbitrages[idx].first[i].first);
+					prices.erase(prices.begin() + arbitrages[idx].first[i].first);
+					num_alive--;
+				}
 			}
 			DEBUG_MSG(profit);
 			profit += arbitrages[idx].second;

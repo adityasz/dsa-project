@@ -33,6 +33,7 @@ cscope.out
 # Phase 1
 phase1/trader
 phase1/iml
+phase1/input.txt
 phase1/output.txt
 
 # Phase 2
