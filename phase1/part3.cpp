@@ -15,36 +15,39 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
 
-	// Get all possible quantity combinations
-	int num = 1;
-	for (int i = 0; i <= num_alive; i++)
-		num *= alive_orders[i].quantity;
-	DEBUG_MSG(num << " quantity combinations\n");
+	for (auto subset : powerset(u)) {
+		subset.push_back(num_alive);
 
-	std::vector<std::vector<int>> pset = powerset(u);
-	for (int j = 0; j < num; j++) {
-		int tmp = j;
-		std::vector<int> comb(num_alive + 1);
-		for (int i = 0; i <= num_alive; i++) {
-			comb[i] = 1 + tmp % alive_orders[i].quantity;
-			tmp /= alive_orders[i].quantity;
-		}
+		// Get all possible quantity combinations
+		int num = 1;
+		for (auto idx : subset)
+			num *= alive_orders[idx].quantity;
+		DEBUG_MSG(num << " quantity combinations\n");
 
-		for (auto subset : pset) {
-			subset.push_back(num_alive);
+		for (int j = 0; j < num; j++) {
 			std::unordered_map<std::string, int> quantities;
 			int profit = 0;
-			for (auto idx : subset) {
-				switch (alive_orders[idx].type) {
+			int tmp = j;
+			std::vector<int> comb(subset.size());
+
+			for (int i = 0; i < subset.size(); i++) {
+				comb[i] = 1 + tmp % alive_orders[subset[i]].quantity;
+				tmp /= alive_orders[subset[i]].quantity;
+			}
+
+			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
+				switch (alive_orders[*idx].type) {
 				case 'b':
-					for (auto it : alive_orders[idx].quantities)
-						quantities[it.first] += comb[idx] * it.second;
-					profit += comb[idx] * alive_orders[idx].price;
+					for (auto it = alive_orders[*idx].quantities.begin();
+					     it != alive_orders[*idx].quantities.end(); it++)
+						quantities[it->first] += comb[idx - subset.begin()] * it->second;
+					profit += comb[idx - subset.begin()] * alive_orders[*idx].price;
 					break;
 				case 's':
-					for (auto it : alive_orders[idx].quantities)
-						quantities[it.first] -= comb[idx] * it.second;
-					profit -= comb[idx] * alive_orders[idx].price;
+					for (auto it = alive_orders[*idx].quantities.begin();
+					     it != alive_orders[*idx].quantities.end(); it++)
+						quantities[it->first] -= comb[idx - subset.begin()] * it->second;
+					profit -= comb[idx - subset.begin()] * alive_orders[*idx].price;
 					break;
 				}
 			}
@@ -57,7 +60,7 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 			if (flag && profit > 0) {
 				std::vector<std::pair<int, int>> v(subset.size());
 				for (int i = 0; i < subset.size(); i++)
-					v[i] = std::make_pair(subset[i], comb[subset[i]]);
+					v[i] = std::make_pair(subset[i], comb[i]);
 				arbitrages.push_back(std::make_pair(v, profit));
 			}
 #ifdef DEBUG

@@ -54,7 +54,9 @@ int main(int argc, char *argv[])
 	__get_time(end);
 
 	__duration(🛺, start, end);
-	DEBUG_MSG("Execution time: " << 🛺 << " ms\n");
+	DEBUG_MSG("Please note that execution time with DEBUG flag is much\n"
+	       << "higher than without, since some DEBUG messages require extra\n"
+	       << "loop iterations. Execution time: " << 🛺 << " ms.\n\n");
 
 	return 0;
 }
