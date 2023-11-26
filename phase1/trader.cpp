@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include "../stl/bits/unordered_map.h"
+#include "stl/bits/unordered_map.h"
 
 #ifdef DEBUG
 #include <chrono>
@@ -8,19 +8,21 @@
 #define __get_time(x)       auto x = std::chrono::steady_clock::now()
 #define __duration(t, x, y) auto t = std::chrono::duration<double, std::milli> (y - x).count()
 #define __print_vector(v)                                                      \
-	int __idx__ = 0;                                                       \
-	for (auto x : v) {                                                     \
-		if (__idx__++ > 8) {                                           \
-			DEBUG_MSG("...\n");                                    \
-			break;                                                 \
-		}                                                              \
-		DEBUG_MSG(x << ' ');                                           \
-	}
+        do {                                                                   \
+        	int __idx__ = 0;                                               \
+        	for (auto x : v) {                                             \
+        		if (__idx__++ > 8) {                                   \
+        			DEBUG_MSG("...\n");                            \
+        			break;                                         \
+        		}                                                      \
+        		DEBUG_MSG(x << ' ');                                   \
+        	}                                                              \
+        } while (0)                                                            \
 #else
-#define DEBUG_MSG(x)
-#define __get_time(x)
-#define __duration(t, x, y)
-#define __print_vector(v)
+#define DEBUG_MSG(x)         do {} while (0)
+#define __get_time(x)        do {} while (0)
+#define __duration(t, x, y)  do {} while (0)
+#define __print_vector(v)    do {} while (0)
 #endif
 
 #include "receiver.h"

@@ -1,4 +1,4 @@
-#include "../stl/algorithm"
+#include "stl/algorithm"
 
 bool arbitrage(
 	int num_alive,
