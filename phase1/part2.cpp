@@ -91,7 +91,8 @@ bool arbitrage(int num_alive, std::vector<order> &alive_orders,
 
 void part_2_sol(std::string &message, std::string &sp, int &num_alive,
                 std::vector<order> &alive_orders, int &profit,
-                std::vector<order> &alive_buy, std::vector<order> &alive_sell)
+                std::unordered_map<std::string, long long> &alive_buy,
+                std::unordered_map<std::string, long long> &alive_sell)
 {
 	int begin = 0;
 	while (true) {
@@ -157,6 +158,7 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		std::sort(stocks.begin(), stocks.end());
 		for (auto stock : stocks)
 			alive_orders[num_alive].name += stock;
+		DEBUG_MSG("Name: " << alive_orders[num_alive].name << '\n');
 
 		std::vector<std::pair<std::vector<int>, int>> arbitrages;
 
