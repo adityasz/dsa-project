@@ -21,7 +21,8 @@ directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'input
 
 print_files_with_prefix(directory_path, 'input_' + file_prefix)
 
-n = input('Enter input number: ')
+print('Enter input number: ', end='')
+n = input('')
 input_file = 'inputs/input_' + sys.argv[1] + '_' + n
 output_file = 'input.txt'
 
