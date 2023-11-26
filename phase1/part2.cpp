@@ -1,11 +1,14 @@
 #include "stl/algorithm"
 
+#ifndef ORDER
+#define ORDER
 struct order {
 	std::unordered_map<std::string, long long> quantities;
 	int         price;
 	char        type;
 	std::string name;
 };
+#endif
 
 void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
 		     std::vector<std::vector<int>> &powerset)

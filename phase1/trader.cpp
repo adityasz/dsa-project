@@ -28,7 +28,7 @@
 #include "receiver.h"
 #include "part1.cpp"
 #include "part2.cpp"
-// #include "part3.cpp"
+#include "part3.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 		part_2(rcv);
 		break;
 	case '3':
-		// part_3(rcv);
+		part_3(rcv);
 		break;
 	}
 	__get_time(end);
