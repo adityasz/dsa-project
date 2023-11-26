@@ -1,14 +1,11 @@
 #include "stl/algorithm"
 
-#ifndef ORDER
-#define ORDER
 struct order {
 	std::unordered_map<std::string, long long> quantities;
 	int         price;
 	char        type;
 	std::string name;
 };
-#endif
 
 void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
 		     std::vector<std::vector<int>> &powerset)
@@ -43,7 +40,7 @@ bool arbitrage(int num_alive, std::vector<order> &alive_orders,
 	#endif
 
 	for (auto subset : powerset(u)) {
-		std::unordered_map<std::string, long long> lin_comb;
+		std::unordered_map<std::string, long long> quantities;
 		long long profit = 0;
 		subset.push_back(num_alive);
 
@@ -64,13 +61,13 @@ bool arbitrage(int num_alive, std::vector<order> &alive_orders,
 			switch (alive_orders[idx].type) {
 			case 'b':
 				for (auto it : alive_orders[idx].quantities) {
-					lin_comb[it.first] += it.second;
+					quantities[it.first] += it.second;
 				}
 				profit += alive_orders[idx].price;
 				break;
 			case 's':
 				for (auto it : alive_orders[idx].quantities) {
-					lin_comb[it.first] -= it.second;
+					quantities[it.first] -= it.second;
 				}
 				profit -= alive_orders[idx].price;
 				break;
@@ -78,7 +75,7 @@ bool arbitrage(int num_alive, std::vector<order> &alive_orders,
 		}
 
 		bool flag = true;
-		for (auto it : lin_comb) {
+		for (auto it : quantities) {
 			if (it.second)
 				flag = false;
 		}

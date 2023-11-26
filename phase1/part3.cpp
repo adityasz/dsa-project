@@ -1,112 +1,105 @@
 #include "stl/algorithm"
 
-#ifndef ORDER
-#define ORDER
-struct order {
+struct order_q {
 	std::unordered_map<std::string, long long> quantities;
 	int         price;
 	char        type;
+	long long   quantity;
 	std::string name;
 };
-#endif
 
-bool arbitrage(int num_alive, std::vector<order> &alive_orders,
+bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
                std::vector<std::pair<std::vector<std::pair<int, long long>>, int>> &arbitrages)
 {
 	std::vector<int> u(num_alive);
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
-	DEBUG_MSG("Cycles:\n");
 
 	#ifdef DEBUG
 	int __count__ = 0;
 	bool __dots__ = true;
+	bool __flag__ = true;
 	#endif
 
-	for (auto subset : powerset(u)) {
-		std::unordered_map<std::string, long long> lin_comb;
-		long long profit = 0;
-		subset.push_back(num_alive);
+	// Get all possible quantity combinations
+	long long num = 1;
+	for (int i = 0; i < num_alive + 1; i++)
+		num *= alive_orders[i].quantity;
+	DEBUG_MSG(num << " quantity combinations\n");
 
-		#ifdef DEBUG
-		if (__count__++ < 8) {
-			DEBUG_MSG('\t');
-			__print_vector(subset);
-			DEBUG_MSG('\n');
-		} else {
-			if (__dots__) {
-				DEBUG_MSG("\t...\n");
-				__dots__ = false;
-			}
+	for (long long j = 0; j < num; j++) {
+		long long tmp = j;
+		std::vector<int> comb(num_alive + 1);
+		for (int i = 0; i < num_alive + 1; i++) {
+			comb[i] = 1 + tmp % alive_orders[i].quantity;
+			tmp /= alive_orders[i].quantity;
 		}
-		#endif
 
-		long long num = 1;	// number of quantity combinations
-		for (auto idx : subset)
-			num *= alive_orders[idx].second;
+		DEBUG_MSG("Quantities: ");
+		__print_vector(comb);
+		DEBUG_MSG('\n');
+		DEBUG_MSG("\tArbitrage\tProfit\tCycle\n");
 
-		#ifdef DEBUG
-		bool __flag__ = true;
-		#endif
-
-		for (int j = 0; j < num; j++) {
-			long long tmp = j;
-			std::vector<int> comb(subset.size());
-
-			for (int i = 0; i < subset.size(); i++) {
-				comb[i] = 1 + tmp % alive_orders[subset[i]].second;
-				tmp /= alive_orders[subset[i]].second;
-			}
-
-			for (auto idx = subset.begin(); idx < subset.end(); idx++) {
-				for (auto it = alive_orders[*idx].first.begin();
-					it != alive_orders[*idx].first.end(); it++) {
-					if (prices[*idx].second == 'b')
-						lin_comb[it->first] += comb[idx - subset.begin()] * it->second;
-					else
-						lin_comb[it->first] -= comb[idx - subset.begin()] * it->second;
-				}
-				if (prices[*idx].second == 'b')
-					profit += comb[idx - subset.begin()] * prices[*idx].first;
-				else
-					profit -= comb[idx - subset.begin()] * prices[*idx].first;
-			}
-
-			#ifdef DEBUG
-			if (j < 8) {
-				DEBUG_MSG("\t\tCombination " << j << ": ");
-				__print_vector(comb);
-				DEBUG_MSG("\tProfit: " << profit << '\n');
-			} else {
-				if (__flag__) {
-					DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
-					__flag__ = false;
+		for (auto subset : powerset(u)) {
+			subset.push_back(num_alive);
+			std::unordered_map<std::string, long long> quantities;
+			long long profit = 0;
+			for (auto idx : subset) {
+				switch (alive_orders[idx].type) {
+				case 'b':
+					for (auto it : alive_orders[idx].quantities)
+						quantities[it.first] += comb[idx] * it.second;
+					profit += comb[idx] * alive_orders[idx].price;
+					break;
+				case 's':
+					for (auto it : alive_orders[idx].quantities)
+						quantities[it.first] -= comb[idx] * it.second;
+					profit -= comb[idx] * alive_orders[idx].price;
+					break;
 				}
 			}
-			#endif
 
 			bool flag = true;
-			for (auto it = lin_comb.begin(); it != lin_comb.end(); it++) {
-				if (it->second) {
+			for (auto it : quantities) {
+				if (it.second)
 					flag = false;
-				}
 			}
 			if (flag && profit > 0) {
 				std::vector<std::pair<int, long long>> v(subset.size());
-				for (int i = 0; i < subset.size(); i++) {
-					v[i] = std::make_pair(subset[i], comb[i]);
-				}
+				for (int i = 0; i < subset.size(); i++)
+					v[i] = std::make_pair(subset[i], comb[subset[i]]);
 				arbitrages.push_back(std::make_pair(v, profit));
 			}
+
+#ifdef DEBUG
+			// if (j < 8) {
+				if (flag)
+					DEBUG_MSG("\tYes\t");
+				else
+					DEBUG_MSG("\tNo\t");
+				DEBUG_MSG('\t' << profit << '\t');
+				__print_vector(subset);
+				DEBUG_MSG('\n');
+			// } else {
+				// if (__flag__) {
+				// 	DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
+				// 	__flag__ = false;
+				// }
+			// }
+#endif
+
 		}
 	}
+
 	if (arbitrages.size())
 		return true;
 	return false;
 }
+
 void part_3_sol(std::string &message, std::string &sp, int &num_alive,
-	std::vector<std::pair<std::unordered_map<std::string, long long>, long long>> &alive_orders,
-	std::vector<std::pair<long long, char>> &prices, int &profit)
+                std::vector<order_q> &alive_orders, int &profit,
+		std::unordered_map<std::string, long long> &alive_buy,
+		std::unordered_map<std::string, long long> &alive_sell)
 {
 	int begin = 0;
 	while (true) {
@@ -124,11 +117,12 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 		if (sp.size() && begin == 0)
 			curr = sp + curr;
 		
+		std::vector<std::string> stocks;
 		std::string amount_str;
 		std::string qty_str;
 		long long   amount;
 		long long   quantity;
-		char        buy_sell;
+		char        type;
 		int         idx = -1;
 		
 		// Get linear combination
@@ -150,10 +144,10 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			if (num_alive == alive_orders.size()) {
 				DEBUG_MSG("#### PANIC ####");
 				alive_orders.resize(2 * alive_orders.size());
-				prices.resize(2 * prices.size());
 			}
 
-			alive_orders[num_alive].first[stock_name] = quantity;
+			alive_orders[num_alive].quantities[stock_name] = quantity;
+			stocks.push_back(stock_name + qty_str);
 
 			DEBUG_MSG(stock_name << '\t' << quantity << '\n');
 		} while (curr[idx + 1] - '9' > 0);
@@ -162,6 +156,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 		while (curr[++idx] != ' ')
 			amount_str += curr[idx];
 		amount = std::stoi(amount_str);
+		alive_orders[num_alive].price = amount;
 		DEBUG_MSG("Price: " << amount << '\n');
 
 		// Get quantity
@@ -169,16 +164,55 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			qty_str += curr[idx];
 		quantity = std::stoi(qty_str);
 		DEBUG_MSG("Quantity: " << quantity << '\n');
-		alive_orders[num_alive].second = quantity;
+		alive_orders[num_alive].quantity = quantity;
 
 		// Get buy/sell
-		buy_sell = curr[++idx];
-		DEBUG_MSG("Buy/sell: " << buy_sell << '\n');
-		
-		prices[num_alive] = std::make_pair(amount, buy_sell);
+		type = curr[++idx];
+		alive_orders[num_alive].type = type;
+		DEBUG_MSG("Buy/sell: " << type << '\n');
+
+		// Cancellation
+		bool cancelled = false;
+		for (int i = 0; i < num_alive; i++) {
+			if (alive_orders[i].type != type &&
+			    alive_orders[i].price == amount &&
+			    alive_orders[i].name == alive_orders[num_alive].name) {
+				if (alive_orders[i].quantity > quantity) {
+					alive_orders[i].quantity -= quantity;
+					alive_orders.erase(alive_orders.begin() + num_alive);
+					cancelled = true;
+					num_alive--;
+					DEBUG_MSG("No trade\n");
+					std::cout << "No trade\n";
+					break;
+				} else if (alive_orders[i].quantity == quantity) {
+					alive_orders.erase(alive_orders.begin() + i);
+					alive_orders.erase(alive_orders.begin() + num_alive);
+					num_alive -= 2;
+					cancelled = true;
+					DEBUG_MSG("No trade\n");
+					std::cout << "No trade\n";
+					break;
+				} else {
+					alive_orders[num_alive].quantity -= alive_orders[i].quantity;
+					alive_orders.erase(alive_orders.begin() + i);
+					num_alive--;
+				}
+			}
+		}
+
+		if (cancelled) {
+			DEBUG_MSG("No Trade\n");
+			std::cout << "No Trade\n";
+			num_alive++;
+			begin = end + 2;
+			if (begin > message.size() - 1)
+				break;
+			continue;
+		}
 
 		std::vector<std::pair<std::vector<std::pair<int, long long>>, int>> arbitrages;
-		if (arbitrage(num_alive, alive_orders, prices, arbitrages)) {
+		if (arbitrage(num_alive, alive_orders, arbitrages)) {
 			int idx =
 			        std::max_element(arbitrages.begin(),
 			                         arbitrages.end(),
@@ -187,23 +221,23 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			            - arbitrages.begin();
 			for (int i = arbitrages[idx].first.size() - 1; i >= 0; i--) {
 				// Print traded orders
-				for (auto it = alive_orders[arbitrages[idx].first[i].first].first.begin();
-				     it != alive_orders[arbitrages[idx].first[i].first].first.end(); it++) {
-					DEBUG_MSG(it->first << ' ' << it->second << ' ');
-					std::cout << it->first << ' ' << it->second << ' ';
+				for (auto it : alive_orders[arbitrages[idx].first[i].first].quantities) {
+					DEBUG_MSG(it.first << ' ' << it.second << ' ');
+					std::cout << it.first << ' ' << it.second << ' ';
 				}
-				DEBUG_MSG(prices[i].first << ' ');
+				DEBUG_MSG(alive_orders[i].price << ' ');
 				DEBUG_MSG(arbitrages[idx].first[i].second << ' ');
-				DEBUG_MSG(char('b' + 's' - prices[i].second) << "#\n");
-				std::cout << prices[i].first << ' ';
+				DEBUG_MSG(char('b' + 's' - alive_orders[i].type) << "#\n");
+				std::cout << alive_orders[i].price << ' ';
 				std::cout << arbitrages[idx].first[i].second << ' ';
-				std::cout << char('b' + 's' - prices[i].second) << "#\n";
+				std::cout << char('b' + 's' - alive_orders[i].type) << "#\n";
 
 				// Remove traded orders
-				alive_orders[arbitrages[idx].first[i].first].second -= arbitrages[idx].first[i].second;
-				if (alive_orders[arbitrages[idx].first[i].first].second == 0) {
-					alive_orders.erase(alive_orders.begin() + arbitrages[idx].first[i].first);
-					prices.erase(prices.begin() + arbitrages[idx].first[i].first);
+				alive_orders[arbitrages[idx].first[i].first].quantity -=
+					arbitrages[idx].first[i].second;
+				if (alive_orders[arbitrages[idx].first[i].first].quantity == 0) {
+					alive_orders.erase(alive_orders.begin() +
+					                   arbitrages[idx].first[i].first);
 					num_alive--;
 				}
 			}
@@ -227,14 +261,16 @@ void part_3(Receiver rcv)
 	std::string sp = "";
 
 	// Initialize to 64 to prevent frequent resize && copy operations
-	std::vector<std::pair<std::unordered_map<std::string, long long>, long long>> alive_orders(64);
-	std::vector<std::pair<long long, char>> prices(64);
+	std::vector<order_q> alive_orders(64);
+	std::unordered_map<std::string, long long> alive_buy;
+	std::unordered_map<std::string, long long> alive_sell;
 	int num_alive = 0;
 	int profit    = 0;
 
 	while (!input_end) {
 		std::string message = rcv.readIML();
-		part_3_sol(message, sp, num_alive, alive_orders, prices, profit);
+		part_3_sol(message, sp, num_alive, alive_orders, profit,
+		           alive_buy, alive_sell);
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
@@ -247,3 +283,87 @@ void part_3(Receiver rcv)
 		}
 	}
 }
+
+		// switch (type) {
+		// case 'b':
+		// 	// Combine buy orders
+		// 	if (alive_buy.contains(alive_orders[num_alive].name) &&
+		// 	    alive_buy[alive_orders[num_alive].name] == amount) {
+		// 		int idx = 0;
+		// 		for (idx = 0; idx < num_alive; idx++) {
+		// 			if (alive_orders[idx].name == name &&
+		// 			    alive_orders[idx].type == 'b')
+		// 				break;
+		// 		}
+		// 		alive_orders[num_alive].quantity += alive_orders[idx].quantity;
+		// 		alive_orders.erase(alive_orders.begin() + idx);
+		// 		num_alive--;
+		// 	}
+		// 	// Cancel buy/sell
+		// 	if (alive_sell.contains(alive_orders[num_alive].name) &&
+		// 	    alive_sell[alive_orders[num_alive].name] == amount) {
+		// 		int idx = 0;
+		// 		for (idx = 0; idx < num_alive; idx++) {
+		// 			if (alive_orders[idx].name == name &&
+		// 			    alive_orders[idx].type == 's')
+		// 				break;
+		// 		}
+		// 		if (alive_orders[num_alive].quantity > alive_orders[idx].quantity) {
+		// 			alive_orders[num_alive].quantity -= alive_orders[idx].quantity;
+		// 			alive_orders.erase(alive_orders.begin() + idx);
+		// 			num_alive--;
+		// 			break;
+		// 		}
+		// 		if (alive_orders[num_alive].quantity < alive_orders[idx].quantity) {
+		// 			alive_orders[idx].quantity -= alive_orders[num_alive].quantity;
+		// 			alive_orders.erase(alive_orders.begin() + num_alive);
+		// 			num_alive--;
+		// 			cancelled = true;
+		// 			break;
+		// 		}
+		// 		alive_orders.erase(alive_orders.begin() + num_alive);
+		// 		alive_orders.erase(alive_orders.begin() + idx);
+		// 		num_alive -= 2;
+		// 		cancelled = true;
+		// 		break;
+		// 	}
+		// case 's':
+		// 	if (alive_sell.contains(alive_orders[num_alive].name) &&
+		// 	    alive_sell[alive_orders[num_alive]] == amount) {
+		// 		int idx = 0;
+		// 		for (idx = 0; idx < num_alive; idx++) {
+		// 			if (alive_orders[idx].name == name)
+		// 				break;
+		// 		}
+		// 		alive_orders[num_alive].quantity += alive_orders[idx].quantity;
+		// 		alive_orders.erase(alive_orders.begin() + idx);
+		// 		num_alive--;
+		// 	}
+		// 	if (alive_buy.contains(alive_orders[num_alive].name) &&
+		// 	    alive_buy[alive_orders[num_alive]] == amount) {
+		// 		int idx = 0;
+		// 		for (idx = 0; idx < num_alive; idx++) {
+		// 			if (alive_orders[idx].name == name)
+		// 				break;
+		// 		}
+		// 		if (alive_orders[num_alive].quantity >
+		// 			alive_buy[alive_orders[num_alive].name]) {
+		// 			alive_orders[num_alive].quantity -= alive_orders[idx].quantity;
+		// 			alive_orders.erase(alive_orders.begin() + idx);
+		// 			num_alive--;
+		// 			break;
+		// 		}
+		// 		if (alive_orders[num_alive].quantity <
+		// 			alive_sell[alive_orders[num_alive].name]) {
+		// 			alive_orders[idx].quantity -= alive_orders[num_alive].quantity;
+		// 			alive_orders.erase(alive_orders.begin() + num_alive);
+		// 			num_alive--;
+		// 			break;
+		// 		}
+		// 		alive_orders.erase(alive_orders.begin() + num_alive);
+		// 		alive_orders.erase(alive_orders.begin() + idx);
+		// 		num_alive -= 2;
+		// 		break;
+		// 	}
+		// 	break;
+		// }
