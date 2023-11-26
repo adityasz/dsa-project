@@ -1,38 +1,39 @@
 #include "stl/algorithm"
 
 struct order_q {
-	std::unordered_map<std::string, long long> quantities;
-	int         price;
-	char        type;
-	long long   quantity;
+	std::unordered_map<std::string, int> quantities;
 	std::string name;
+	int  price;
+	char type;
+	int  quantity;
 };
 
 bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
-               std::vector<std::pair<std::vector<std::pair<int, long long>>, int>> &arbitrages)
+               std::vector<std::pair<std::vector<std::pair<int, int>>, int>> &arbitrages)
 {
 	std::vector<int> u(num_alive);
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
 
 	// Get all possible quantity combinations
-	long long num = 1;
-	for (int i = 0; i < num_alive + 1; i++)
+	int num = 1;
+	for (int i = 0; i <= num_alive; i++)
 		num *= alive_orders[i].quantity;
 	DEBUG_MSG(num << " quantity combinations\n");
 
-	for (long long j = 0; j < num; j++) {
-		long long tmp = j;
+	std::vector<std::vector<int>> pset = powerset(u);
+	for (int j = 0; j < num; j++) {
+		int tmp = j;
 		std::vector<int> comb(num_alive + 1);
-		for (int i = 0; i < num_alive + 1; i++) {
+		for (int i = 0; i <= num_alive; i++) {
 			comb[i] = 1 + tmp % alive_orders[i].quantity;
 			tmp /= alive_orders[i].quantity;
 		}
 
-		for (auto subset : powerset(u)) {
+		for (auto subset : pset) {
 			subset.push_back(num_alive);
-			std::unordered_map<std::string, long long> quantities;
-			long long profit = 0;
+			std::unordered_map<std::string, int> quantities;
+			int profit = 0;
 			for (auto idx : subset) {
 				switch (alive_orders[idx].type) {
 				case 'b':
@@ -54,7 +55,7 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 					flag = false;
 			}
 			if (flag && profit > 0) {
-				std::vector<std::pair<int, long long>> v(subset.size());
+				std::vector<std::pair<int, int>> v(subset.size());
 				for (int i = 0; i < subset.size(); i++)
 					v[i] = std::make_pair(subset[i], comb[subset[i]]);
 				arbitrages.push_back(std::make_pair(v, profit));
@@ -80,9 +81,7 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 }
 
 void part_3_sol(std::string &message, std::string &sp, int &num_alive,
-                std::vector<order_q> &alive_orders, int &profit,
-		std::unordered_map<std::string, long long> &alive_buy,
-		std::unordered_map<std::string, long long> &alive_sell)
+                std::vector<order_q> &alive_orders, int &profit)
 {
 	int begin = 0;
 	while (true) {
@@ -103,8 +102,8 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 		std::vector<std::string> stocks;
 		std::string amount_str;
 		std::string qty_str;
-		long long   amount;
-		long long   quantity;
+		int         amount;
+		int         quantity;
 		char        type;
 		int         idx = -1;
 		
@@ -114,7 +113,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 		do {
 			std::string stock_name;
 			std::string qty_str;
-			long long   quantity;
+			int   quantity;
 
 			while (curr[++idx] != ' ')
 				stock_name += curr[idx];
@@ -154,8 +153,15 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 		alive_orders[num_alive].type = type;
 		DEBUG_MSG("Buy/sell: " << type << '\n');
 
+		// Set name
+		std::sort(stocks.begin(), stocks.end());
+		for (auto stock : stocks)
+			alive_orders[num_alive].name += stock;
+		DEBUG_MSG("Name: " << alive_orders[num_alive].name << '\n');
+
 		// Cancellation
 		bool cancelled = false;
+loop_begin:
 		for (int i = 0; i < num_alive; i++) {
 			if (alive_orders[i].type != type &&
 			    alive_orders[i].price == amount &&
@@ -163,23 +169,23 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 				if (alive_orders[i].quantity > quantity) {
 					alive_orders[i].quantity -= quantity;
 					alive_orders.erase(alive_orders.begin() + num_alive);
-					cancelled = true;
 					num_alive--;
-					DEBUG_MSG("No trade\n");
-					std::cout << "No trade\n";
+					DEBUG_MSG("Cancelled due to 1\n");
+					cancelled = true;
 					break;
 				} else if (alive_orders[i].quantity == quantity) {
 					alive_orders.erase(alive_orders.begin() + i);
+					num_alive--;
 					alive_orders.erase(alive_orders.begin() + num_alive);
-					num_alive -= 2;
+					num_alive--;
+					DEBUG_MSG("Cancelled due to 2\n");
 					cancelled = true;
-					DEBUG_MSG("No trade\n");
-					std::cout << "No trade\n";
 					break;
 				} else {
 					alive_orders[num_alive].quantity -= alive_orders[i].quantity;
 					alive_orders.erase(alive_orders.begin() + i);
 					num_alive--;
+					goto loop_begin;
 				}
 			}
 		}
@@ -194,7 +200,7 @@ void part_3_sol(std::string &message, std::string &sp, int &num_alive,
 			continue;
 		}
 
-		std::vector<std::pair<std::vector<std::pair<int, long long>>, int>> arbitrages;
+		std::vector<std::pair<std::vector<std::pair<int, int>>, int>> arbitrages;
 		if (arbitrage(num_alive, alive_orders, arbitrages)) {
 			int idx =
 			        std::max_element(arbitrages.begin(),
@@ -245,15 +251,12 @@ void part_3(Receiver rcv)
 
 	// Initialize to 64 to prevent frequent resize && copy operations
 	std::vector<order_q> alive_orders(64);
-	std::unordered_map<std::string, long long> alive_buy;
-	std::unordered_map<std::string, long long> alive_sell;
 	int num_alive = 0;
 	int profit    = 0;
 
 	while (!input_end) {
 		std::string message = rcv.readIML();
-		part_3_sol(message, sp, num_alive, alive_orders, profit,
-		           alive_buy, alive_sell);
+		part_3_sol(message, sp, num_alive, alive_orders, profit);
 
 		if (message.find('$') != std::string::npos) {
 			rcv.terminate();
@@ -266,87 +269,3 @@ void part_3(Receiver rcv)
 		}
 	}
 }
-
-		// switch (type) {
-		// case 'b':
-		// 	// Combine buy orders
-		// 	if (alive_buy.contains(alive_orders[num_alive].name) &&
-		// 	    alive_buy[alive_orders[num_alive].name] == amount) {
-		// 		int idx = 0;
-		// 		for (idx = 0; idx < num_alive; idx++) {
-		// 			if (alive_orders[idx].name == name &&
-		// 			    alive_orders[idx].type == 'b')
-		// 				break;
-		// 		}
-		// 		alive_orders[num_alive].quantity += alive_orders[idx].quantity;
-		// 		alive_orders.erase(alive_orders.begin() + idx);
-		// 		num_alive--;
-		// 	}
-		// 	// Cancel buy/sell
-		// 	if (alive_sell.contains(alive_orders[num_alive].name) &&
-		// 	    alive_sell[alive_orders[num_alive].name] == amount) {
-		// 		int idx = 0;
-		// 		for (idx = 0; idx < num_alive; idx++) {
-		// 			if (alive_orders[idx].name == name &&
-		// 			    alive_orders[idx].type == 's')
-		// 				break;
-		// 		}
-		// 		if (alive_orders[num_alive].quantity > alive_orders[idx].quantity) {
-		// 			alive_orders[num_alive].quantity -= alive_orders[idx].quantity;
-		// 			alive_orders.erase(alive_orders.begin() + idx);
-		// 			num_alive--;
-		// 			break;
-		// 		}
-		// 		if (alive_orders[num_alive].quantity < alive_orders[idx].quantity) {
-		// 			alive_orders[idx].quantity -= alive_orders[num_alive].quantity;
-		// 			alive_orders.erase(alive_orders.begin() + num_alive);
-		// 			num_alive--;
-		// 			cancelled = true;
-		// 			break;
-		// 		}
-		// 		alive_orders.erase(alive_orders.begin() + num_alive);
-		// 		alive_orders.erase(alive_orders.begin() + idx);
-		// 		num_alive -= 2;
-		// 		cancelled = true;
-		// 		break;
-		// 	}
-		// case 's':
-		// 	if (alive_sell.contains(alive_orders[num_alive].name) &&
-		// 	    alive_sell[alive_orders[num_alive]] == amount) {
-		// 		int idx = 0;
-		// 		for (idx = 0; idx < num_alive; idx++) {
-		// 			if (alive_orders[idx].name == name)
-		// 				break;
-		// 		}
-		// 		alive_orders[num_alive].quantity += alive_orders[idx].quantity;
-		// 		alive_orders.erase(alive_orders.begin() + idx);
-		// 		num_alive--;
-		// 	}
-		// 	if (alive_buy.contains(alive_orders[num_alive].name) &&
-		// 	    alive_buy[alive_orders[num_alive]] == amount) {
-		// 		int idx = 0;
-		// 		for (idx = 0; idx < num_alive; idx++) {
-		// 			if (alive_orders[idx].name == name)
-		// 				break;
-		// 		}
-		// 		if (alive_orders[num_alive].quantity >
-		// 			alive_buy[alive_orders[num_alive].name]) {
-		// 			alive_orders[num_alive].quantity -= alive_orders[idx].quantity;
-		// 			alive_orders.erase(alive_orders.begin() + idx);
-		// 			num_alive--;
-		// 			break;
-		// 		}
-		// 		if (alive_orders[num_alive].quantity <
-		// 			alive_sell[alive_orders[num_alive].name]) {
-		// 			alive_orders[idx].quantity -= alive_orders[num_alive].quantity;
-		// 			alive_orders.erase(alive_orders.begin() + num_alive);
-		// 			num_alive--;
-		// 			break;
-		// 		}
-		// 		alive_orders.erase(alive_orders.begin() + num_alive);
-		// 		alive_orders.erase(alive_orders.begin() + idx);
-		// 		num_alive -= 2;
-		// 		break;
-		// 	}
-		// 	break;
-		// }
