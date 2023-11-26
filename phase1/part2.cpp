@@ -7,6 +7,92 @@ struct order {
 	std::string name;
 };
 
+bool is_valid(int& num_alive, std::vector<order>& alive_orders,
+			  std::unordered_map<std::string, long long>& alive_buy,
+			  std::unordered_map<std::string, long long>& alive_sell)
+{	
+	order curr_order = alive_orders[num_alive];
+	std::string curr_name = alive_orders[num_alive].name;
+	if (!alive_buy.contains(curr_name) && !alive_sell.contains(curr_name)) {
+		return true;
+	}
+	if (curr_order.type == 'b') {
+		if (alive_buy.contains(curr_name) && alive_buy[curr_name] >= curr_order.price){
+			// remove current order and return false
+			alive_orders.erase(alive_orders.begin() + num_alive);
+			num_alive--;
+			return false;
+		} else if (alive_sell.contains(curr_name) && alive_sell[curr_name] == curr_order.price) {
+			// remove all 3 orders (3 if alive_buy also exists) and return false
+			alive_orders.erase(alive_orders.begin() + num_alive);
+			num_alive--;
+			// find for curr_order.name
+			for (auto it = alive_orders.begin(); it < alive_orders.begin() + num_alive; it++) {	// this loop will remove atleast 1 atmost 2 orders
+				if (it->name == curr_name){
+					alive_orders.erase(it);
+					num_alive--;
+				}
+			}
+			// remove alive_buy and alive_sell from map
+			alive_buy.erase(curr_name);
+			alive_sell.erase(curr_name);
+			return false;
+		} else {
+			// We don't remove curr_order, so return true
+			// We don't remove alive sell
+			// We remove alive buy if exists
+			for (auto it = alive_orders.begin(); it < alive_orders.begin() + num_alive; it++) {	// this loop will remove atleast 1 atmost 2 orders
+				if (it->name == curr_name && it->type == 'b'){
+					std::cout<<"Hello\n";
+					std::cout<<it->name<<" "<<it->price<<" "<<it->type<<'\n';
+					alive_orders.erase(it);
+					num_alive--;
+				}
+			}
+			// make alive buy to be curr_name
+			alive_buy[curr_name] = curr_order.price;
+			return true;
+		}
+	} else {
+		// if curr_order.type == 's'
+		if (alive_sell.contains(curr_name) && alive_sell[curr_name] <= curr_order.price) {
+			// remove current order and return false
+			alive_orders.erase(alive_orders.begin() + num_alive);
+			num_alive--;
+			return false;
+		} else if (alive_buy.contains(curr_name) && alive_buy[curr_name] == curr_order.price) {
+			// remove all 3 orders (3 if alive_buy also exists) and return false
+			alive_orders.erase(alive_orders.begin() + num_alive);
+			num_alive--;
+			// find for curr_order.name
+			for (auto it = alive_orders.begin(); it < alive_orders.begin() + num_alive; it++) {	// this loop will remove atleast 1 atmost 2 orders
+				if (it->name == curr_name){
+					alive_orders.erase(it);
+					num_alive--;
+				}
+
+			}
+			// remove alive_buy and alive_sell from map
+			alive_buy.erase(curr_name);
+			alive_sell.erase(curr_name);
+			return false;
+		} else {
+			// We don't remove curr_order, so return true
+			// We don't remove alive sell
+			// We remove alive buy if exists
+			for (auto it = alive_orders.begin(); it < alive_orders.begin() + num_alive; it++) {	// this loop will remove atleast 1 atmost 2 orders
+				if (it->name == curr_name && it->type == 's'){
+					alive_orders.erase(it);
+					num_alive--;
+				}
+			}
+			// make alive buy to be curr_name
+			alive_sell[curr_name] = curr_order.price;
+			return true;
+		}
+	}
+}
+
 void powerset_helper(std::vector<int> &v, int i, std::vector<int> &subset,
 		     std::vector<std::vector<int>> &powerset)
 {
@@ -160,6 +246,18 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 			alive_orders[num_alive].name += stock;
 		DEBUG_MSG("Name: " << alive_orders[num_alive].name << '\n');
 
+		// Check for Cancellations
+		if (!is_valid(num_alive, alive_orders, alive_buy, alive_sell)) {
+			DEBUG_MSG("No Trade\n");
+			std::cout << "No Trade\n";
+			num_alive++;
+			begin = end + 2;
+			if (begin > message.size() - 1)
+				break;
+			continue;
+		}
+
+
 		std::vector<std::pair<std::vector<int>, int>> arbitrages;
 
 		if (arbitrage(num_alive, alive_orders, arbitrages)) {
@@ -184,6 +282,9 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 				          << "#\n";
 
 				// Remove traded orders
+				// TODO : Check below Removal of these from alive_buy and alive_sell map is correct
+				alive_buy.erase(alive_orders[arbitrages[idx].first[i]].name);
+				alive_sell.erase(alive_orders[arbitrages[idx].first[i]].name);
 				alive_orders.erase(alive_orders.begin() + arbitrages[idx].first[i]);
 				num_alive--;
 			}
@@ -193,6 +294,11 @@ void part_2_sol(std::string &message, std::string &sp, int &num_alive,
 		} else {
 			DEBUG_MSG("No Trade\n");
 			std::cout << "No Trade\n";
+			// This offer doesn't form arbitrage so this is alive
+			if (alive_orders[num_alive].type == 'b')
+				alive_buy[alive_orders[num_alive].name] = alive_orders[num_alive].price;
+			else
+				alive_sell[alive_orders[num_alive].name] = alive_orders[num_alive].price;
 		}
 
 		num_alive++;
@@ -230,3 +336,4 @@ void part_2(Receiver rcv)
 		}
 	}
 }
+
