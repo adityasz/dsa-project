@@ -15,12 +15,6 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 	for (int i = 0; i < num_alive; i++)
 		u[i] = i;
 
-	#ifdef DEBUG
-	int __count__ = 0;
-	bool __dots__ = true;
-	bool __flag__ = true;
-	#endif
-
 	// Get all possible quantity combinations
 	long long num = 1;
 	for (int i = 0; i < num_alive + 1; i++)
@@ -34,11 +28,6 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 			comb[i] = 1 + tmp % alive_orders[i].quantity;
 			tmp /= alive_orders[i].quantity;
 		}
-
-		DEBUG_MSG("Quantities: ");
-		__print_vector(comb);
-		DEBUG_MSG('\n');
-		DEBUG_MSG("\tArbitrage\tProfit\tCycle\n");
 
 		for (auto subset : powerset(u)) {
 			subset.push_back(num_alive);
@@ -70,24 +59,18 @@ bool arbitrage(int num_alive, std::vector<order_q> &alive_orders,
 					v[i] = std::make_pair(subset[i], comb[subset[i]]);
 				arbitrages.push_back(std::make_pair(v, profit));
 			}
-
 #ifdef DEBUG
-			// if (j < 8) {
-				if (flag)
-					DEBUG_MSG("\tYes\t");
-				else
-					DEBUG_MSG("\tNo\t");
+			if (flag) {
+				DEBUG_MSG("Quantities: ");
+				__print_vector(comb);
+				DEBUG_MSG('\n');
+				DEBUG_MSG("\tArbitrage\tProfit\tCycle\n");
+				DEBUG_MSG("\tYes\t");
 				DEBUG_MSG('\t' << profit << '\t');
 				__print_vector(subset);
 				DEBUG_MSG('\n');
-			// } else {
-				// if (__flag__) {
-				// 	DEBUG_MSG("\t\t.\n\t\t.\n\t\t.\n");
-				// 	__flag__ = false;
-				// }
-			// }
+			}
 #endif
-
 		}
 	}
 
