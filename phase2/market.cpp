@@ -34,7 +34,7 @@ struct order {
 	int arrival;
 	int duration;
 	int expiry;
-	int amount;
+	int price;
 	int quantity;
 
 	bool alive;
@@ -62,9 +62,9 @@ struct compare_expiry {
 
 struct compare_buy {
 	bool operator()(const order &a, const order &b) const {
-		if (a.amount > b.amount)
+		if (a.price > b.price)
 			return true;
-		if (a.amount < b.amount)
+		if (a.price < b.price)
 			return false;
 		if (a.arrival < b.arrival)
 			return true;
@@ -78,9 +78,9 @@ struct compare_buy {
 
 struct compare_sell {
 	bool operator()(const order &a, const order &b) const {
-		if (a.amount < b.amount)
+		if (a.price < b.price)
 			return true;
-		if (a.amount > b.amount)
+		if (a.price > b.price)
 			return false;
 		if (a.arrival < b.arrival)
 			return true;
@@ -121,18 +121,15 @@ void market::start()
 
 			   // heaps;
 
-	// (stock name, (expiry_heap, buy_heap, sell_heap))
-	std::unordered_map<std::string,
-                           std::tuple<std::priority_queue<order, std::vector<order>, compare_buy>,
-                                      std::priority_queue<order, std::vector<order>, compare_sell>>>
-			   heaps;
+	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_buy>> buy_heaps;
+	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_sell>> sell_heaps;
 
 	for (auto line : lines) {
 		DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
 		order curr;
 
 		std::string arrival_str;
-		std::string amount_str;
+		std::string price_str;
 		std::string qty_str;
 		std::string duration_str;
 
@@ -157,6 +154,7 @@ void market::start()
 		
 		// Get linear combination
 		if (curr.stock.find(' ') != std::string::npos) {
+			curr.stock.push_back(' ');
 			std::vector<std::string> stocks;
 			int i = -1;
 			do {
@@ -165,10 +163,10 @@ void market::start()
 
 				while (curr.stock[++i] != ' ')
 					stock_name += curr.stock[i];
-				// if (curr.stock[idx + 1] <= '9') {
-				while (i < curr.stock.size() - 1 && curr.stock[++i] != ' ') 
-					qty_str += curr.stock[i];
-				// }
+				if (curr.stock[i + 1] <= '9') {
+					while (curr.stock[++i] != ' ') 
+						qty_str += curr.stock[i];
+				}
 
 				stocks.push_back(stock_name + qty_str);
 			} while (i < curr.stock.size() - 1);
@@ -179,8 +177,8 @@ void market::start()
 		}
 
 		while (line[++idx] != ' ')
-			amount_str += line[idx];
-		curr.amount = std::stoi(amount_str);
+			price_str += line[idx];
+		curr.price = std::stoi(price_str);
 
 		// Get quantity
 		idx++;	// ignore '#'
@@ -200,12 +198,13 @@ void market::start()
 			curr.expiry = curr.arrival + curr.duration;
 		}
 		
+		DEBUG_MSG(line << '\n');
 		DEBUG_MSG("Arrival time: " << curr.arrival);
 		DEBUG_MSG("\tDuration: " << curr.duration);
 		DEBUG_MSG("\tExpiry time: " << curr.expiry << '\n');
 		DEBUG_MSG("Trader: " << curr.trader);
 		DEBUG_MSG("\tStock: " << curr.stock << '\n');
-		DEBUG_MSG("Amount: " << curr.amount);
+		DEBUG_MSG("Amount: " << curr.price);
 		DEBUG_MSG("\tQuantity: " << curr.quantity << '\n');
 
 		// for (auto it : heaps) {
@@ -217,7 +216,7 @@ void market::start()
 
 		// switch (curr.type[0]) {
 		// case 'B':
-		// 	while (std::get<2>(heaps[curr.stock]).top().get().amount <= curr.amount) {
+		// 	while (std::get<2>(heaps[curr.stock]).top().get().price <= curr.price) {
 		// 		if (std::get<2>(heaps[curr.stock]).top().get().quantity > curr.quantity) {
 		// 			std::get<2>(heaps[curr.stock]).top().get().quantity -= curr.quantity;
 		// 			break;
@@ -228,7 +227,65 @@ void market::start()
 		// 	break;
 		// }
 
-
+		if (curr.type[0] == 'B') {
+			// auto &heap = sell_heaps[curr.stock];
+			if (sell_heaps[curr.stock].empty()) {
+				buy_heaps[curr.stock].push(curr);
+				continue;
+			}
+			while (sell_heaps[curr.stock].top().expiry < curr.arrival)
+				sell_heaps[curr.stock].pop();
+			int alive = true;
+			while (sell_heaps[curr.stock].top().price <= curr.price) {
+				if (sell_heaps[curr.stock].top().quantity > curr.quantity) {
+					std::cout << "\n";
+					alive = false;
+					break;
+				}
+				if (sell_heaps[curr.stock].top().quantity == curr.quantity) {
+					sell_heaps[curr.stock].pop();
+					std::cout << "\n";
+					alive = false;
+					break;
+				}
+				if (sell_heaps[curr.stock].top().quantity < curr.quantity) {
+					sell_heaps[curr.stock].pop();
+					curr.quantity -= sell_heaps[curr.stock].top().quantity;
+					std::cout << "\n";
+				}
+			}
+			if (alive)
+				buy_heaps[curr.stock].push(curr);
+		} else {
+			// auto &buy_heaps[curr.stock] = buy_heaps[curr.stock];
+			if (buy_heaps[curr.stock].empty()) {
+				sell_heaps[curr.stock].push(curr);
+				continue;
+			}
+			while (buy_heaps[curr.stock].top().expiry < curr.arrival)
+				buy_heaps[curr.stock].pop();
+			int alive = true;
+			while (buy_heaps[curr.stock].top().price >= curr.price) {
+				if (buy_heaps[curr.stock].top().quantity > curr.quantity) {
+					std::cout << "\n";
+					alive = false;
+					break;
+				}
+				if (buy_heaps[curr.stock].top().quantity == curr.quantity) {
+					buy_heaps[curr.stock].pop();
+					std::cout << "\n";
+					alive = false;
+					break;
+				}
+				if (buy_heaps[curr.stock].top().quantity < curr.quantity) {
+					buy_heaps[curr.stock].pop();
+					curr.quantity -= buy_heaps[curr.stock].top().quantity;
+					std::cout << "\n";
+				}
+			}
+			if (alive)
+				sell_heaps[curr.stock].push(curr);
+		}
 	}
 
 	DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
