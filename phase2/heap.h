@@ -58,10 +58,10 @@ void heap::pop()
 
 void heap::heapify(int i)
 {
-	if (left >= size)
+	if (left(i) >= sz)
 		return;
 	
-	if (right < size) {
+	if (right(i) < sz) {
 		int c = std::max({v[i], v[left(i)], v[right(i)]});
 
 		if (v[i] == c)
