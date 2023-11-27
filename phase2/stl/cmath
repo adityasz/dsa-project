@@ -38,15 +38,15 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h"
+#include "bitss/requires_hosted.h"
 
-#include "bits/c++config.h"
-#include "bits/cpp_type_traits.h"
-#include "ext/type_traits.h"
+#include "bitss/c++config.h"
+#include "bitss/cpp_type_traits.h"
+#include "extt/type_traits.h"
 #define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
 #include_next <math.h>
 #undef _GLIBCXX_INCLUDE_NEXT_C_HEADERS
-#include "bits/std_abs.h"
+#include "bitss/std_abs.h"
 
 #ifndef _GLIBCXX_CMATH
 #define _GLIBCXX_CMATH 1
@@ -3696,7 +3696,7 @@ _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace
 
 #if _GLIBCXX_USE_STD_SPEC_FUNCS
-#  include <bits/specfun.h>
+#include "bitss/specfun.h"
 #endif
 
 } // extern "C++"

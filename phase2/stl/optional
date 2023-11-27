@@ -38,17 +38,17 @@
 #include "exception"
 #include "new"
 #include "initializer_list"
-#include "bits/enable_special_members.h"
-#include "bits/exception_defines.h"
-#include "bits/functional_hash.h"
-#include "bits/stl_construct.h" // _Construct
-#include "bits/utility.h" // in_place_t
+#include "bitss/enable_special_members.h"
+#include "bitss/exception_defines.h"
+#include "bitss/functional_hash.h"
+#include "bitss/stl_construct.h" // _Construct
+#include "bitss/utility.h" // in_place_t
 #if __cplusplus > 201703L
-# include <compare>
-# include <bits/invoke.h> // std::__invoke
+#include "compare"
+#include "bitss/invoke.h" // std::__invoke
 #endif
 #if __cplusplus > 202002L
-# include <concepts>
+#include "concepts"
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)

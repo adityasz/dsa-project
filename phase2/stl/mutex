@@ -31,27 +31,27 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "tuple"
 #include "exception"
 #include "type_traits"
-#include "bits/chrono.h"
-#include "bits/error_constants.h"
-#include "bits/std_mutex.h"
-#include "bits/unique_lock.h"
+#include "bitss/chrono.h"
+#include "bitss/error_constants.h"
+#include "bitss/std_mutex.h"
+#include "bitss/unique_lock.h"
 #if ! _GTHREAD_USE_MUTEX_TIMEDLOCK
-# include <condition_variable>
-# include <thread>
+#include "condition_variable"
+#include "thread"
 #endif
-#include "ext/atomicity.h"     // __gnu_cxx::__is_single_threaded
+#include "extt/atomicity.h"     // __gnu_cxx::__is_single_threaded
 
 #if defined _GLIBCXX_HAS_GTHREADS && ! defined _GLIBCXX_HAVE_TLS
-# include <bits/std_function.h>  // std::function
+#include "bitss/std_function.h"  // std::function
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)

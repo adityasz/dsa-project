@@ -46,7 +46,7 @@
 #undef __need_size_t
 #undef __need_NULL
 #undef __need_wint_t
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 #include "stddef.h"
 
 extern "C++"

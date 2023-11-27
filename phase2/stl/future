@@ -31,26 +31,26 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "mutex"	      // call_once
 #include "condition_variable" // __at_thread_exit_elt
 #include "system_error"
-#include "bits/atomic_base.h" // atomic_flag
-#include "bits/allocated_ptr.h"
-#include "bits/atomic_futex.h"
-#include "bits/exception_defines.h"
-#include "bits/invoke.h"
-#include "bits/unique_ptr.h"
-#include "bits/shared_ptr.h"
-#include "bits/std_function.h"
-#include "bits/std_thread.h"
-#include "bits/uses_allocator.h"
-#include "ext/aligned_buffer.h"
+#include "bitss/atomic_base.h" // atomic_flag
+#include "bitss/allocated_ptr.h"
+#include "bitss/atomic_futex.h"
+#include "bitss/exception_defines.h"
+#include "bitss/invoke.h"
+#include "bitss/unique_ptr.h"
+#include "bitss/shared_ptr.h"
+#include "bitss/std_function.h"
+#include "bitss/std_thread.h"
+#include "bitss/uses_allocator.h"
+#include "extt/aligned_buffer.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

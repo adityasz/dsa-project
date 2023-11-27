@@ -32,7 +32,7 @@
 #define _GLIBCXX_CCOMPLEX 1
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #endif
 
 extern "C++" {

@@ -31,22 +31,22 @@
 
 #if __cplusplus > 201703L
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 #if _GLIBCXX_USE_CXX11_ABI
 
 #define __cpp_lib_syncbuf 201803L
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // iostreams
+#include "bitss/requires_hosted.h" // iostreams
 
 #include "sstream"
 
-#include "bits/alloc_traits.h"
-#include "bits/allocator.h"
-#include "bits/functexcept.h"
-#include "bits/functional_hash.h"
-#include "bits/std_mutex.h"
+#include "bitss/alloc_traits.h"
+#include "bitss/allocator.h"
+#include "bitss/functexcept.h"
+#include "bitss/functional_hash.h"
+#include "bitss/std_mutex.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

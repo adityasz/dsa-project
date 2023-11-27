@@ -36,11 +36,11 @@
 
 #include "type_traits"
 #if __cplusplus > 201703L
-# include <compare>
+#include "compare"
 #endif
 
 #if !defined __cpp_lib_three_way_comparison
-# include <bits/stl_function.h> // for std::less
+#include "bitss/stl_function.h" // for std::less
 #endif
 
 /**

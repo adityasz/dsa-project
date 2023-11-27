@@ -35,7 +35,7 @@
 # pragma GCC system_header
 #endif
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 // c++03
 #if _GLIBCXX_HOSTED

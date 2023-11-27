@@ -31,10 +31,10 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus > 201703L
-#include "bits/semaphore_base.h"
+#include "bitss/semaphore_base.h"
 
 #if __cpp_lib_atomic_wait || _GLIBCXX_HAVE_POSIX_SEMAPHORE
 namespace std _GLIBCXX_VISIBILITY(default)

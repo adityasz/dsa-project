@@ -35,27 +35,27 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // containers
+#include "bitss/requires_hosted.h" // containers
 
-#include "bits/c++config.h"
-#include "bits/stringfwd.h"
-#include "bits/char_traits.h"
-#include "bits/allocator.h"
-#include "bits/cpp_type_traits.h"
-#include "bits/localefwd.h>    // For operators >", <<, and getline.
-#include "bits/ostream_insert.h"
-#include "bits/stl_iterator_base_funcs.h"
-#include "bits/stl_iterator.h"
-#include "bits/stl_function.h" // For less
-#include "ext/numeric_traits.h"
-#include "bits/stl_algobase.h"
-#include "bits/refwrap.h"
-#include "bits/range_access.h"
-#include "bits/basic_string.h"
-#include "bits/basic_string.tcc"
+#include "bitss/c++config.h"
+#include "bitss/stringfwd.h"
+#include "bitss/char_traits.h"
+#include "bitss/allocator.h"
+#include "bitss/cpp_type_traits.h"
+#include "bitss/localefwd.h>    // For operators >", <<, and getline.
+#include "bitss/ostream_insert.h"
+#include "bitss/stl_iterator_base_funcs.h"
+#include "bitss/stl_iterator.h"
+#include "bitss/stl_function.h" // For less
+#include "extt/numeric_traits.h"
+#include "bitss/stl_algobase.h"
+#include "bitss/refwrap.h"
+#include "bitss/range_access.h"
+#include "bitss/basic_string.h"
+#include "bitss/basic_string.tcc"
 
 #if __cplusplus >= 201703L && _GLIBCXX_USE_CXX11_ABI
-#include "bits/memory_resource.h"
+#include "bitss/memory_resource.h"
 namespace std _GLIBCXX_VISIBILITY(default)
 {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION

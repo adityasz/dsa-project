@@ -34,11 +34,11 @@
 #pragma GCC system_header
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
-#include "bits/locale_classes.h"
-#include "bits/codecvt.h"
+#include "bitss/locale_classes.h"
+#include "bitss/codecvt.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

@@ -60,35 +60,35 @@
  * Smart pointers, etc.
  */
 
-#include "bits/memoryfwd.h"
+#include "bitss/memoryfwd.h"
 #if _GLIBCXX_HOSTED
-# include <bits/allocator.h>
-# include <bits/stl_tempbuf.h>
+#include "bitss/allocator.h"
+#include "bitss/stl_tempbuf.h"
 #endif
-#include "bits/stl_construct.h"
-#include "bits/stl_uninitialized.h"
-#include "bits/stl_raw_storage_iter.h"
+#include "bitss/stl_construct.h"
+#include "bitss/stl_uninitialized.h"
+#include "bitss/stl_raw_storage_iter.h"
 
 #if __cplusplus >= 201103L
-#  include <type_traits>
-#  include <bits/align.h>
-#  include <bits/uses_allocator.h>
-#  include <bits/alloc_traits.h>
-#  include <debug/debug.h>
-#  include <bits/unique_ptr.h>
+#include "type_traits"
+#include "bitss/align.h"
+#include "bitss/uses_allocator.h"
+#include "bitss/alloc_traits.h"
+#include "debugg/debug.h"
+#include "bitss/unique_ptr.h"
 # if _GLIBCXX_HOSTED
-#  include <bits/shared_ptr.h>
-#  include <bits/shared_ptr_atomic.h>
+#include "bitss/shared_ptr.h"
+#include "bitss/shared_ptr_atomic.h"
 # endif
 #endif
 
 #if __cplusplus < 201103L || _GLIBCXX_USE_DEPRECATED
-#  include <backward/auto_ptr.h>
+#include "backwardd/auto_ptr.h"
 #endif
 
 #if __cplusplus > 201703L
-#  include <bits/ranges_uninitialized.h>
-#  include <bits/uses_allocator_args.h>
+#include "bitss/ranges_uninitialized.h"
+#include "bitss/uses_allocator_args.h"
 #endif
 
 /* As a hack, we declare __cpp_lib_atomic_value_initialization here even though
@@ -148,10 +148,10 @@ _GLIBCXX_END_NAMESPACE_VERSION
 // Parallel STL algorithms
 # if _PSTL_EXECUTION_POLICIES_DEFINED
 // If <execution> has already been included, pull in implementations
-#  include <pstl/glue_memory_impl.h>
+#include "pstll/glue_memory_impl.h"
 # else
 // Otherwise just pull in forward declarations
-#  include <pstl/glue_memory_defs.h>
+#include "pstll/glue_memory_defs.h"
 # endif
 
 // Feature test macro for parallel algorithms

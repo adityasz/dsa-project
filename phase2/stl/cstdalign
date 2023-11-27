@@ -32,11 +32,11 @@
 #define _GLIBCXX_CSTDALIGN 1
 
 #if __cplusplus < 201103L
-#  include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
-#  include <bits/c++config.h>
+#include "bitss/c++config.h"
 #  if _GLIBCXX_HAVE_STDALIGN_H
-#    include <stdalign.h>
+#include "stdalign.h"
 #  endif
 #endif
 

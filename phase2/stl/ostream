@@ -35,10 +35,10 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // iostreams
+#include "bitss/requires_hosted.h" // iostreams
 
 #include "ios"
-#include "bits/ostream_insert.h"
+#include "bitss/ostream_insert.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {
@@ -877,6 +877,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
 
-#include "bits/ostream.tcc"
+#include "bitss/ostream.tcc"
 
 #endif	/* _GLIBCXX_OSTREAM */

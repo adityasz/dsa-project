@@ -37,20 +37,20 @@
 
 #if __cplusplus >= 201703L
 
-#include "bits/char_traits.h"
-#include "bits/functexcept.h"
-#include "bits/functional_hash.h"
-#include "bits/range_access.h"
-#include "bits/stl_algobase.h"
-#include "ext/numeric_traits.h"
+#include "bitss/char_traits.h"
+#include "bitss/functexcept.h"
+#include "bitss/functional_hash.h"
+#include "bitss/range_access.h"
+#include "bitss/stl_algobase.h"
+#include "extt/numeric_traits.h"
 
 #if __cplusplus >= 202002L
-# include <bits/ranges_base.h>
+#include "bitss/ranges_base.h"
 #endif
 
 #if _GLIBCXX_HOSTED
-# include <iosfwd>
-# include <bits/ostream_insert.h>
+#include "iosfwd"
+#include "bitss/ostream_insert.h"
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)
@@ -901,7 +901,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
 
-#include "bits/string_view.tcc"
+#include "bitss/string_view.tcc"
 
 #endif // __cplusplus <= 201402L
 

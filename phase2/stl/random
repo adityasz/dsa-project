@@ -31,10 +31,10 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // OS-dependent random
+#include "bitss/requires_hosted.h" // OS-dependent random
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "cmath"
@@ -42,15 +42,15 @@
 #include "string"
 #include "iosfwd"
 #include "limits"
-#include "debug/debug.h"
+#include "debugg/debug.h"
 #include "type_traits"
 
 #ifdef _GLIBCXX_USE_C99_STDINT_TR1
 
 #include "cstdint" // For uint_fast32_t, uint_fast64_t, uint_least32_t
-#include "bits/random.h"
-#include "bits/opt_random.h"
-#include "bits/random.tcc"
+#include "bitss/random.h"
+#include "bitss/opt_random.h"
+#include "bitss/random.tcc"
 
 #endif // _GLIBCXX_USE_C99_STDINT_TR1
 

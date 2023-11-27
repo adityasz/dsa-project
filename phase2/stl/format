@@ -31,7 +31,7 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // for std::string
+#include "bitss/requires_hosted.h" // for std::string
 
 #if __cplusplus >= 202002L
 
@@ -45,15 +45,15 @@
 #include "string_view"
 #include "string"
 #include "variant"	       // monostate (TODO: move to bits/utility.h?)
-#include "bits/ranges_base.h"  // input_range, range_reference_t
-#include "bits/ranges_algobase.h" // ranges::copy
-#include "bits/stl_iterator.h" // back_insert_iterator
-#include "bits/stl_pair.h"     // __is_pair
-#include "bits/utility.h"      // tuple_size_v
-#include "ext/numeric_traits.h" // __int_traits
+#include "bitss/ranges_base.h"  // input_range, range_reference_t
+#include "bitss/ranges_algobase.h" // ranges::copy
+#include "bitss/stl_iterator.h" // back_insert_iterator
+#include "bitss/stl_pair.h"     // __is_pair
+#include "bitss/utility.h"      // tuple_size_v
+#include "extt/numeric_traits.h" // __int_traits
 
 #if !__has_builtin(__builtin_toupper)
-# include <cctype>
+#include "cctype"
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)

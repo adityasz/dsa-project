@@ -32,8 +32,8 @@
 
 #pragma GCC system_header
 
-#include "bits/c++config.h"
-#include "bits/exception.h"
+#include "bitss/c++config.h"
+#include "bitss/exception.h"
 
 extern "C++" {
 
@@ -161,8 +161,8 @@ _GLIBCXX_END_NAMESPACE_VERSION
 } // extern "C++"
 
 #if (__cplusplus >= 201103L)
-#include "bits/exception_ptr.h"
-#include "bits/nested_exception.h"
+#include "bitss/exception_ptr.h"
+#include "bitss/nested_exception.h"
 #endif
 
 #endif

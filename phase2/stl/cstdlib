@@ -38,7 +38,7 @@
 
 #pragma GCC system_header
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 #ifndef _GLIBCXX_CSTDLIB
 #define _GLIBCXX_CSTDLIB 1
@@ -78,7 +78,7 @@ namespace std
 #define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
 #include_next <stdlib.h>
 #undef _GLIBCXX_INCLUDE_NEXT_C_HEADERS
-#include "bits/std_abs.h"
+#include "bitss/std_abs.h"
 
 // Get rid of those macros defined in <stdlib.h> in lieu of real functions.
 #undef abort

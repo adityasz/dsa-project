@@ -31,7 +31,7 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // for error codes
+#include "bitss/requires_hosted.h" // for error codes
 
 // As an extension we support <charconv> in C++14, but this header should not
 // be included by any other library headers in C++14 mode. This ensures that
@@ -41,9 +41,9 @@
 
 #include "type_traits"
 #include "bit"			// for __bit_width
-#include "bits/charconv.h"	// for __to_chars_len, __to_chars_10_impl
-#include "bits/error_constants.h" // for std::errc
-#include "ext/numeric_traits.h"
+#include "bitss/charconv.h"	// for __to_chars_len, __to_chars_10_impl
+#include "bitss/error_constants.h" // for std::errc
+#include "extt/numeric_traits.h"
 
 #if _GLIBCXX_FLOAT_IS_IEEE_BINARY32 && _GLIBCXX_DOUBLE_IS_IEEE_BINARY64 \
     && __SIZE_WIDTH__ >= 32 && _GLIBCXX_HOSTED

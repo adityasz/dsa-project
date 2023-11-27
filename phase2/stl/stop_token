@@ -29,12 +29,12 @@
 #ifndef _GLIBCXX_STOP_TOKEN
 #define _GLIBCXX_STOP_TOKEN
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus > 201703L
 
 #include "atomic"
-#include "bits/std_thread.h"
+#include "bitss/std_thread.h"
 
 #include "semaphore"
 

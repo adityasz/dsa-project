@@ -33,7 +33,7 @@
 #ifndef _GLIBCXX_STDLIB_H
 #define _GLIBCXX_STDLIB_H 1
 
-# include <cstdlib>
+#include "cstdlib"
 
 using std::abort;
 using std::atexit;

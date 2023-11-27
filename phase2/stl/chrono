@@ -32,22 +32,22 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h> // for <ctime" and clocks
+#include "bitss/requires_hosted.h> // for <ctime" and clocks
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
-#include "bits/chrono.h"
+#include "bitss/chrono.h"
 
 #if __cplusplus >= 202002L
-# include <bit>
-# include <sstream>
-# include <string>
-# include <vector>
-# include <bits/stl_algo.h> // upper_bound
-# include <bits/shared_ptr.h>
-# include <bits/unique_ptr.h>
+#include "bit"
+#include "sstream"
+#include "string"
+#include "vector"
+#include "bitss/stl_algo.h" // upper_bound
+#include "bitss/shared_ptr.h"
+#include "bitss/unique_ptr.h"
 #endif
 
 #if __cplusplus >= 202002L
@@ -3327,7 +3327,7 @@ _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
 
 #if __cplusplus >= 202002L
-# include <bits/chrono_io.h>
+#include "bitss/chrono_io.h"
 #endif
 
 #endif // C++11

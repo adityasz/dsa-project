@@ -32,16 +32,16 @@
 #pragma GCC system_header
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
-#include "bits/stl_pair.h"		// for std::pair
-#include "bits/uses_allocator.h"	// for std::allocator_arg_t
-#include "bits/utility.h"		// for std::tuple_size etc.
-#include "bits/invoke.h"		// for std::__invoke
+#include "bitss/stl_pair.h"		// for std::pair
+#include "bitss/uses_allocator.h"	// for std::allocator_arg_t
+#include "bitss/utility.h"		// for std::tuple_size etc.
+#include "bitss/invoke.h"		// for std::__invoke
 #if __cplusplus > 201703L
-# include <compare>
-# include <bits/ranges_util.h>		// for std::ranges::subrange
+#include "compare"
+#include "bitss/ranges_util.h"		// for std::ranges::subrange
 # define __cpp_lib_constexpr_tuple 201811L
 #endif
 

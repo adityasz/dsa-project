@@ -26,10 +26,10 @@
  *  This is a Standard C++ Library header.
  */
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 #if __cplusplus >= 201103L
-# include <ccomplex>
+#include "ccomplex"
 #endif
 
 #if __cplusplus >= 201103L && defined(__STRICT_ANSI__)

@@ -38,9 +38,9 @@
 
 #pragma GCC system_header
 
-#include "bits/c++config.h"
-#include "bits/cpp_type_traits.h"
-#include "ext/type_traits.h"
+#include "bitss/c++config.h"
+#include "bitss/cpp_type_traits.h"
+#include "extt/type_traits.h"
 #include "cmath"
 #include "sstream"
 

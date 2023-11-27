@@ -57,26 +57,26 @@
 
 #pragma GCC system_header
 
-#include "bits/c++config.h"
-#include "bits/stl_iterator_base_types.h"
-#include "bits/stl_numeric.h"
+#include "bitss/c++config.h"
+#include "bitss/stl_iterator_base_types.h"
+#include "bitss/stl_numeric.h"
 
 #ifdef _GLIBCXX_PARALLEL
-# include <parallel/numeric>
+#include "parallell/numeric"
 #endif
 
 #if __cplusplus >= 201402L
-# include <type_traits>
-# include <bit>
-# include <ext/numeric_traits.h>
+#include "type_traits"
+#include "bit"
+#include "extt/numeric_traits.h"
 #endif
 
 #if __cplusplus >= 201703L
-# include <bits/stl_function.h>
+#include "bitss/stl_function.h"
 #endif
 
 #if __cplusplus > 201703L
-# include <limits>
+#include "limits"
 #endif
 
 /**
@@ -733,10 +733,10 @@ _GLIBCXX_END_NAMESPACE_VERSION
 // Parallel STL algorithms
 # if _PSTL_EXECUTION_POLICIES_DEFINED
 // If <execution> has already been included, pull in implementations
-#  include <pstl/glue_numeric_impl.h>
+#include "pstll/glue_numeric_impl.h"
 # else
 // Otherwise just pull in forward declarations
-#  include <pstl/glue_numeric_defs.h>
+#include "pstll/glue_numeric_defs.h"
 #  define _PSTL_NUMERIC_FORWARD_DECLARED 1
 # endif
 

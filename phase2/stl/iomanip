@@ -35,16 +35,16 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // iostreams
+#include "bitss/requires_hosted.h" // iostreams
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 #include "iosfwd"
-#include "bits/ios_base.h"
+#include "bitss/ios_base.h"
 
 #if __cplusplus >= 201103L
 #include "locale"
 #if __cplusplus > 201103L
-#include "bits/quoted_string.h"
+#include "bitss/quoted_string.h"
 #endif
 #endif
 

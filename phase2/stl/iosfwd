@@ -35,11 +35,11 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // iostreams
+#include "bitss/requires_hosted.h" // iostreams
 
-#include "bits/c++config.h"
-#include "bits/stringfwd.h" 	// For string forward declarations.
-#include "bits/postypes.h"
+#include "bitss/c++config.h"
+#include "bitss/stringfwd.h" 	// For string forward declarations.
+#include "bitss/postypes.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

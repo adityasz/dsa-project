@@ -30,7 +30,7 @@
 #define _GLIBCXX_SRCLOC 1
 
 #if __cplusplus > 201703L && __has_builtin(__builtin_source_location)
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 namespace std
 {

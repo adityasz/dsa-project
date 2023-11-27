@@ -31,12 +31,12 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus > 201703L
 
-#include "bits/atomic_base.h"
-#include "ext/numeric_traits.h"
+#include "bitss/atomic_base.h"
+#include "extt/numeric_traits.h"
 
 #if __cpp_lib_atomic_wait
 namespace std _GLIBCXX_VISIBILITY(default)

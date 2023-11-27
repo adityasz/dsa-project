@@ -32,18 +32,18 @@
 #pragma GCC system_header
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "compare"
 #include "initializer_list"
 
 #include "type_traits"
-#include "bits/functexcept.h"
-#include "bits/stl_algobase.h"
-#include "bits/range_access.h" // std::begin, std::end etc.
-#include "bits/utility.h"      // std::index_sequence, std::tuple_size
-#include "debug/assertions.h"
+#include "bitss/functexcept.h"
+#include "bitss/stl_algobase.h"
+#include "bitss/range_access.h" // std::begin, std::end etc.
+#include "bitss/utility.h"      // std::index_sequence, std::tuple_size
+#include "debugg/assertions.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

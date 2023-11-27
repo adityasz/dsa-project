@@ -33,12 +33,12 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h> // <cmath" dependant
+#include "bitss/requires_hosted.h> // <cmath" dependant
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 #include "cmath"
 #include "algorithm"
-#include "debug/debug.h"
+#include "debugg/debug.h"
 #if __cplusplus >= 201103L
 #include "initializer_list"
 #endif
@@ -99,8 +99,8 @@ namespace __detail
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace
 
-#include "bits/valarray_array.h"
-#include "bits/valarray_before.h"
+#include "bitss/valarray_array.h"
+#include "bitss/valarray_before.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {
@@ -602,12 +602,12 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace
 
-#include "bits/valarray_after.h"
-#include "bits/slice_array.h"
-#include "bits/gslice.h"
-#include "bits/gslice_array.h"
-#include "bits/mask_array.h"
-#include "bits/indirect_array.h"
+#include "bitss/valarray_after.h"
+#include "bitss/slice_array.h"
+#include "bitss/gslice.h"
+#include "bitss/gslice_array.h"
+#include "bitss/mask_array.h"
+#include "bitss/indirect_array.h"
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

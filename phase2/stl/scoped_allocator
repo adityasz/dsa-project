@@ -32,15 +32,15 @@
 #pragma GCC system_header
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "tuple"
-#include "bits/alloc_traits.h"
-#include "bits/stl_pair.h"
-#include "bits/uses_allocator.h"
+#include "bitss/alloc_traits.h"
+#include "bitss/stl_pair.h"
+#include "bitss/uses_allocator.h"
 #if __cplusplus > 201703L
-# include <bits/uses_allocator_args.h>
+#include "bitss/uses_allocator_args.h"
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)

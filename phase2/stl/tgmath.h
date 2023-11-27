@@ -26,10 +26,10 @@
  *  This is a Standard C++ Library header.
  */
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 #if __cplusplus >= 201103L
-# include <ctgmath>
+#include "ctgmath"
 #else
 # if _GLIBCXX_HAVE_TGMATH_H
 #  include_next <tgmath.h>

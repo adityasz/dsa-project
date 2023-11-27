@@ -27,27 +27,27 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // execution policies are hosted only
+#include "bitss/requires_hosted.h" // execution policies are hosted only
 
 #if __cplusplus >= 201703L
-# include <bits/c++config.h>
-# include <pstl/glue_execution_defs.h>
+#include "bitss/c++config.h"
+#include "pstll/glue_execution_defs.h"
 
 # define _PSTL_EXECUTION_POLICIES_DEFINED 1
 
 // Algorithm implementation
 # if _PSTL_ALGORITHM_FORWARD_DECLARED
-#  include <pstl/glue_algorithm_impl.h>
+#include "pstll/glue_algorithm_impl.h"
 # endif
 
 // Numeric implementation
 # if _PSTL_NUMERIC_FORWARD_DECLARED
-#  include <pstl/glue_numeric_impl.h>
+#include "pstll/glue_numeric_impl.h"
 # endif
 
 // Memory implementation
 # if _PSTL_NUMERIC_FORWARD_DECLARED
-#  include <pstl/glue_memory_impl.h>
+#include "pstll/glue_memory_impl.h"
 # endif
 
 // Feature test macro for parallel algorithms

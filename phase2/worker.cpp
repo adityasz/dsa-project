@@ -14,8 +14,9 @@ extern std::atomic<int> commonTimer;
 extern std::mutex printMutex;
 
 void* workerThread(void* arg) {
-	int thread_id = *(int*)arg;
-	std::ifstream inputFile("inputs/input" + std::to_string(thread_id) + ".txt");
+	int thread_id = *(int *) arg;
+	std::ifstream inputFile("inputs/input" + std::to_string(thread_id) +
+	                        ".txt");
 	std::string line;
 	for (int step = 0; step < NUM_STEPS; ++step) {
 		int currentTime;
@@ -32,7 +33,8 @@ void* workerThread(void* arg) {
 			commonTimer.fetch_add(1);
 			
 			std::string str;
-			if(!std::getline(inputFile, line)) break;			
+			if (!std::getline(inputFile, line))
+				break;			
 			std::cout << currentTime << " " << line << std::endl;
 		}
 	}

@@ -34,5 +34,5 @@
 
 #pragma GCC system_header
 
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 #endif

@@ -31,18 +31,18 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus >= 201402L
 
-#include "bits/chrono.h"
-#include "bits/error_constants.h"
-#include "bits/functexcept.h"
-#include "bits/move.h"        // move, __exchange
-#include "bits/std_mutex.h"   // defer_lock_t
+#include "bitss/chrono.h"
+#include "bitss/error_constants.h"
+#include "bitss/functexcept.h"
+#include "bitss/move.h"        // move, __exchange
+#include "bitss/std_mutex.h"   // defer_lock_t
 
 #if ! (_GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK)
-# include <condition_variable>
+#include "condition_variable"
 #endif
 
 namespace std _GLIBCXX_VISIBILITY(default)

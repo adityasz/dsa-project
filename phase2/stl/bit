@@ -36,9 +36,9 @@
 #include "type_traits"
 
 #if _GLIBCXX_HOSTED || __has_include(<ext/numeric_traits.h>)
-# include <ext/numeric_traits.h>
+#include "extt/numeric_traits.h"
 #else
-# include <limits>
+#include "limits"
 /// @cond undocumented
 namespace __gnu_cxx
 {

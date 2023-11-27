@@ -31,10 +31,10 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // string and container heavy
+#include "bitss/requires_hosted.h" // string and container heavy
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #include "bitset"
@@ -44,32 +44,32 @@
 #include "stdexcept"
 #include "string"
 
-#include "ext/aligned_buffer.h"
-#include "ext/numeric_traits.h"
-#include "bits/shared_ptr.h"
-#include "bits/std_function.h"
-#include "bits/stl_algobase.h" // std::copy, std::fill_n
-#include "bits/stl_algo.h"     // std::sort, std::unique
-#include "bits/stl_iterator_base_types.h" // std::iterator_traits
-#include "bits/stl_pair.h"
-#include "bits/stl_tree.h"
-#include "bits/stl_map.h"
-#include "bits/stl_vector.h"
-#include "bits/stl_bvector.h"
-#include "bits/vector.tcc"
+#include "extt/aligned_buffer.h"
+#include "extt/numeric_traits.h"
+#include "bitss/shared_ptr.h"
+#include "bitss/std_function.h"
+#include "bitss/stl_algobase.h" // std::copy, std::fill_n
+#include "bitss/stl_algo.h"     // std::sort, std::unique
+#include "bitss/stl_iterator_base_types.h" // std::iterator_traits
+#include "bitss/stl_pair.h"
+#include "bitss/stl_tree.h"
+#include "bitss/stl_map.h"
+#include "bitss/stl_vector.h"
+#include "bitss/stl_bvector.h"
+#include "bitss/vector.tcc"
 #ifdef _GLIBCXX_DEBUG
-# include <debug/vector>
+#include "debugg/vector"
 #endif
-#include "bits/regex_constants.h"
-#include "bits/regex_error.h"
-#include "bits/regex_automaton.h"
-#include "bits/regex_scanner.h"
-#include "bits/regex_compiler.h"
-#include "bits/regex.h"
-#include "bits/regex_executor.h"
+#include "bitss/regex_constants.h"
+#include "bitss/regex_error.h"
+#include "bitss/regex_automaton.h"
+#include "bitss/regex_scanner.h"
+#include "bitss/regex_compiler.h"
+#include "bitss/regex.h"
+#include "bitss/regex_executor.h"
 
 #if __cplusplus >= 201703L && _GLIBCXX_USE_CXX11_ABI
-#include "bits/memory_resource.h"
+#include "bitss/memory_resource.h"
 namespace std _GLIBCXX_VISIBILITY(default)
 {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION

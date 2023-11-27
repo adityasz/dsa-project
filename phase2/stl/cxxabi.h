@@ -46,10 +46,10 @@
 #pragma GCC visibility push(default)
 
 #include "stddef.h"
-#include "bits/c++config.h"
-#include "bits/cxxabi_tweaks.h"
-#include "bits/cxxabi_forced.h"
-#include "bits/cxxabi_init_exception.h"
+#include "bitss/c++config.h"
+#include "bitss/cxxabi_tweaks.h"
+#include "bitss/cxxabi_forced.h"
+#include "bitss/cxxabi_init_exception.h"
 
 #ifdef __cplusplus
 namespace __cxxabiv1

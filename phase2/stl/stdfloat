@@ -30,7 +30,7 @@
 #define _GLIBCXX_STDFLOAT 1
 
 #if __cplusplus > 202002L
-#include "bits/c++config.h"
+#include "bitss/c++config.h"
 
 namespace std
 {

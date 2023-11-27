@@ -57,20 +57,20 @@
 
 #pragma GCC system_header
 
-#include "bits/stl_algobase.h"
-#include "bits/stl_algo.h"
+#include "bitss/stl_algobase.h"
+#include "bitss/stl_algo.h"
 #if __cplusplus > 201703L
-# include <bits/ranges_algo.h>
+#include "bitss/ranges_algo.h"
 #endif
 
 #if __cplusplus > 201402L && _GLIBCXX_HOSTED
 // Parallel STL algorithms
 # if _PSTL_EXECUTION_POLICIES_DEFINED
 // If <execution> has already been included, pull in implementations
-#  include <pstl/glue_algorithm_impl.h>
+#include "pstll/glue_algorithm_impl.h"
 #  else
 // Otherwise just pull in forward declarations
-#    include <pstl/glue_algorithm_defs.h>
+#include "pstll/glue_algorithm_defs.h"
 #    define _PSTL_ALGORITHM_FORWARD_DECLARED 1
 #  endif
 
@@ -79,7 +79,7 @@
 #endif // C++17 && HOSTED
 
 #ifdef _GLIBCXX_PARALLEL
-# include <parallel/algorithm>
+#include "parallell/algorithm"
 #endif
 
 #endif /* _GLIBCXX_ALGORITHM */

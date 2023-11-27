@@ -31,19 +31,19 @@
 
 #pragma GCC system_header
 
-#include "bits/requires_hosted.h" // concurrency
+#include "bitss/requires_hosted.h" // concurrency
 
 #if __cplusplus < 201103L
-# include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
 
 #if __cplusplus > 201703L
-# include <compare>	// std::strong_ordering
-# include <stop_token>	// std::stop_source, std::stop_token, std::nostopstate
+#include "compare"	// std::strong_ordering
+#include "stop_token"	// std::stop_source, std::stop_token, std::nostopstate
 #endif
 
-#include "bits/std_thread.h" // std::thread, get_id, yield
-#include "bits/this_thread_sleep.h" // std::this_thread::sleep_for, sleep_until
+#include "bitss/std_thread.h" // std::thread, get_id, yield
+#include "bitss/this_thread_sleep.h" // std::this_thread::sleep_for, sleep_until
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {

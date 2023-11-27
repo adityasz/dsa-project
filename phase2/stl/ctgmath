@@ -32,11 +32,11 @@
 #define _GLIBCXX_CTGMATH 1
 
 #if __cplusplus < 201103L
-#  include <bits/c++0x_warning.h>
+#include "bitss/c++0x_warning.h"
 #else
-#  include <cmath>
+#include "cmath"
 extern "C++" {
-#  include <complex>
+#include "complex"
 }
 #endif
 

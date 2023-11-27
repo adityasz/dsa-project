@@ -33,7 +33,7 @@
 #ifndef _GLIBCXX_MATH_H
 #define _GLIBCXX_MATH_H 1
 
-# include <cmath>
+#include "cmath"
 
 using std::abs;
 using std::acos;
