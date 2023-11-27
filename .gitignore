@@ -30,6 +30,8 @@ cscope.out
 # Built Visual Studio Code Extensions
 *.vsix
 
+*.o
+
 # Phase 1
 phase1/trader
 phase1/iml
@@ -37,11 +39,8 @@ phase1/input.txt
 phase1/output.txt
 
 # Phase 2
-phase2/trader
-phase2/market
+phase2/input.txt
 phase2/output.txt
 
 # Phase 3
-phase3/iml
-phase3/trader
 phase3/output.txt
