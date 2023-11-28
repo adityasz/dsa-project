@@ -239,6 +239,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity > curr.quantity) {
+					DEBUG_MSG(curr.trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << curr.trader << " purchased "
 					          << curr.quantity << " share of "
 					          << curr.stock << " from "
@@ -252,6 +257,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity == curr.quantity) {
+					DEBUG_MSG(curr.trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << curr.trader << " purchased "
 					          << curr.quantity << " share of "
 					          << curr.stock << " from "
@@ -262,6 +272,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity < curr.quantity) {
+					DEBUG_MSG(curr.trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << curr.trader << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr.stock << " from "
@@ -292,6 +307,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity > curr.quantity) {
+					DEBUG_MSG(heap.top().trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader << " purchased "
 					          << curr.quantity << " share of "
 					          << curr.stock << " from "
@@ -305,6 +325,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity == curr.quantity) {
+					DEBUG_MSG(heap.top().trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr.stock << " from "
@@ -315,6 +340,11 @@ void market::start()
 					break;
 				}
 				if (heap.top().quantity < curr.quantity) {
+					DEBUG_MSG(heap.top().trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr.stock << " from "
