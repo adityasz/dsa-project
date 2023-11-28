@@ -6,20 +6,20 @@
 
 int reader(int time)
 {
-	return 1;
+    return 1;
 }
 
 int trader(std::string *message)
 {
-	return 1;
+    return 1;
 }
 
-void* userThread(void *arg)
+void* userThread(void* arg)
 {
-	return nullptr;
+    return nullptr;
 }
 
-void* userTrader(void *arg)
+void* userTrader(void* arg)
 {
-	return nullptr;
+    return nullptr;
 }
