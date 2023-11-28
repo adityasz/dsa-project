@@ -107,6 +107,7 @@ void market::start()
 
 	for (auto line : lines) {
 		DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
+		DEBUG_MSG(line << '\n');
 
 		order curr;
 
@@ -120,6 +121,8 @@ void market::start()
 
 		int  idx = -1;
 		// Get arrival time
+		// while (!('9' - line[idx + 1] >= 0 && line[idx + 1] - '0' >= 0))
+		// 	idx++; // Skip garbage
 		while (line[++idx] != ' ')
 			arrival_str += line[idx];
 		curr.arrival = std::stoi(arrival_str);
@@ -173,8 +176,8 @@ void market::start()
 
 		// Get duration
 		idx++;
-		while (line[idx] != '\r' && line[idx] != '\n' &&
-		       line[idx] != '!')
+		while (idx < line.size() &&
+		       (('9' - line[idx] >= 0 && line[idx] - '0' >= 0) || line[idx] == '-'))
 			duration_str += line[idx++];
 		duration = std::stoi(duration_str);
 		if (duration == -1) {
@@ -183,7 +186,6 @@ void market::start()
 			curr.expiry = curr.arrival + duration;
 		}
 		
-		DEBUG_MSG(line << '\n');
 		DEBUG_MSG("Arrival time: " << curr.arrival);
 		DEBUG_MSG("\tDuration: " << duration);
 		DEBUG_MSG("\tExpiry time: " << curr.expiry << '\n');
