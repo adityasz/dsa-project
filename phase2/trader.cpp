@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "stl/unordered_map"
+#include "stl/map"
 #include "stl/queue"
 #include "stl/algorithm"
 
@@ -40,11 +41,18 @@ extern std::mutex       printMutex;  // Declare the mutex for printing
 
 struct order {
 	std::string trader_name;
+	std::string stock_name;
 
 	int arrival;
 	int expiry;
 	int price;
 	int quantity;
+
+	order();
+	order(std::string name, std::string st, int arr,
+	      int e, int p, int q)
+	        : trader_name(name), stock_name(st), arrival(arr),
+	          expiry(e), price(p), quantity(q) {}
 };
 
 struct compare_buy {
@@ -118,6 +126,7 @@ int reader(int time)
 	// std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 	// pqueue lit(5);
+	std::string apna_naam = "22B0056_22B0636";
 	std::vector<std::string> lines;
 	std::ifstream inputFile ("output.txt");
 	std::string line;
@@ -125,7 +134,11 @@ int reader(int time)
 	// std::unordered_map<std::string, std::priority_queue<int, std::vector<int>, std::greater<int>>> min_heap;
 	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_buy>> buy_heaps;
 	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_sell>> sell_heaps;
-	std::unordered_map<std::string, std::pair<std::priority_queue<int>, std::priority_queue<int>>> median_heaps;
+	// std::unordered_map<std::string, std::pair<std::priority_queue<int>, std::priority_queue<int>>> median_heaps;
+	std::unordered_map<std::string, std::map<int, int>> median_maps;
+	std::unordered_map<std::string, int> qty_traded;
+	std::unordered_map<std::string, order> buy_orders;
+	std::unordered_map<std::string, order> sell_orders;
 
 	while (std::getline(inputFile, line)) {
 		if (line.compare("TL") == 0)
@@ -241,6 +254,8 @@ int reader(int time)
 					continue;
 				}
 				if (heap.top().quantity > curr.quantity) {
+					qty_traded[curr_stock] += curr.quantity;
+					median_maps[curr_stock][heap.top().price] += curr.quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -254,6 +269,8 @@ int reader(int time)
 					break;
 				}
 				if (heap.top().quantity == curr.quantity) {
+					qty_traded[curr_stock] += curr.quantity;
+					median_maps[curr_stock][heap.top().price] += curr.quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -264,6 +281,8 @@ int reader(int time)
 					break;
 				}
 				if (heap.top().quantity < curr.quantity) {
+					qty_traded[curr_stock] += heap.top().quantity;
+					median_maps[curr_stock][heap.top().price] += heap.top().quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
@@ -289,6 +308,8 @@ int reader(int time)
 					continue;
 				}
 				if (heap.top().quantity > curr.quantity) {
+					qty_traded[curr_stock] += curr.quantity;
+					median_maps[curr_stock][heap.top().price] += curr.quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -302,6 +323,8 @@ int reader(int time)
 					break;
 				}
 				if (heap.top().quantity == curr.quantity) {
+					qty_traded[curr_stock] += heap.top().quantity;
+					median_maps[curr_stock][heap.top().price] += heap.top().quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
@@ -312,6 +335,8 @@ int reader(int time)
 					break;
 				}
 				if (heap.top().quantity < curr.quantity) {
+					median_maps[curr_stock][heap.top().price] += heap.top().quantity;
+					qty_traded[curr_stock] += heap.top().quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
@@ -324,6 +349,57 @@ int reader(int time)
 			if (alive)
 				sell_heaps[curr_stock].push(curr);
 		}
+
+		std::vector<order> new_buy_orders;
+		std::vector<order> new_sell_orders;
+		for (auto it : median_maps) {
+			// buy order:
+			int median;
+			int pos = 0;
+			for (auto x : it.second) {
+				if (pos > qty_traded[it.first] / 2)
+					median = x.first;
+				else
+					pos += x.second;
+			}
+
+			// place buy order
+			auto &heap = sell_heaps[it.first];
+			if (sell_orders.contains(it.first)) {
+				if (sell_orders[it.first].expiry < curr.arrival)
+					sell_orders.erase(it.first);
+				else
+					goto sell;
+			}
+			while (!heap.empty() && heap.top().expiry < curr.arrival)
+				heap.pop();
+			if (!heap.empty() && heap.top().price <= median) {
+				order our_order(apna_naam, it.first, curr.arrival,
+						heap.top().expiry, heap.top().price,
+						heap.top().quantity);
+				new_buy_orders.push_back(our_order);
+				buy_orders[it.first] = our_order;
+			}
+sell:
+			// place sell order
+			if (buy_orders.contains(it.first)) {
+				if (buy_orders[it.first].expiry < curr.arrival)
+					buy_orders.erase(it.first);
+				else
+					continue;
+			}
+			auto &heap2 = buy_heaps[it.first];
+			while (!heap2.empty() && heap2.top().expiry < curr.arrival)
+				heap2.pop();
+			if (!heap2.empty() && heap2.top().price >= median) {
+				order our_order(apna_naam, it.first, curr.arrival,
+						heap2.top().expiry, heap2.top().price,
+						heap2.top().quantity);
+				new_sell_orders.push_back(our_order);
+				sell_orders[it.first] = our_order;
+			}
+		}
+
 		__get_time(end);
 		__duration(diff, start, end);
 		DEBUG_MSG(diff << " s\n");
@@ -332,7 +408,19 @@ int reader(int time)
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 			t = commonTimer.load();
 			std::lock_guard<std::mutex> lock(printMutex);
-			std::cout << t << " 22B0056_22B0636 SELL AMD $50 #1000 3" << std::endl;
+
+			for (auto asdf : new_buy_orders) {
+				std::cout << t << " " << apna_naam << " BUY "
+				          << asdf.stock_name << " $" << asdf.price
+				          << " #" << asdf.quantity
+				          << asdf.expiry - curr.arrival << '\n';
+			}
+			for (auto asdf : new_sell_orders) {
+				std::cout << t << " " << apna_naam << " SELL "
+				          << asdf.stock_name << " $" << asdf.price
+				          << " #" << asdf.quantity
+				          << asdf.expiry - curr.arrival << '\n';
+			}
 		}
 	}
 
