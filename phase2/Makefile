@@ -12,7 +12,7 @@ market: main.cpp market.cpp worker.cpp blank_trader.cpp
 
 # For part2
 trader: main.cpp market.cpp worker.cpp trader.cpp
-	g++ -std=c++20 main.cpp market.cpp worker.cpp trader.cpp -lpthread -o trader.o -DDEBUG
+	g++ -std=c++20 main.cpp market.cpp worker.cpp trader.cpp -lpthread -o trader.o #-DDEBUG
 	./trader.o 2 > output.txt
 	cat output.txt
 debug: main.cpp market.cpp worker.cpp trader.cpp

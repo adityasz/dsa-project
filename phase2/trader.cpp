@@ -398,6 +398,7 @@ sell:
 		__duration(diff, start, end);
 		DEBUG_MSG(diff << " s\n");
 
+#ifdef DEBUG
 		for (auto asdf : new_buy_orders) {
 			DEBUG_MSG(curr.arrival << " " << apna_naam << " BUY "
 				  << asdf.second << " $" << asdf.first.price
@@ -410,8 +411,9 @@ sell:
 				  << " #" << asdf.first.quantity
 				  << ' ' << asdf.first.expiry - curr.arrival << '\n');
 		}
+#endif
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(515));
+		std::this_thread::sleep_for(std::chrono::milliseconds(550));
 		{
 			std::lock_guard<std::mutex> lock(printMutex);
 			int t = commonTimer.load();
