@@ -29,42 +29,24 @@
 
 struct order {
 	std::string trader_name;
-	std::string stock;
-	std::string type;
 
 	int arrival;
-	int duration;
 	int expiry;
 	int price;
 	int quantity;
 };
 
-struct trader {
+struct stats {
 	int num_sold;
 	int num_bought;
 	int net_transfer;
-};
 
-struct compare_expiry {
-	bool operator()(const order &a, const order &b) const {
-		if (a.expiry > b.expiry)
-			return true;
-		if (a.expiry < b.expiry)
-			return false;
-		if (a.arrival > b.arrival)
-			return true;
-		if (a.arrival < b.arrival)
-			return false;
-		if (a.trader_name > b.trader_name)
-			return true;
-		return false;
-		// TODO (linked to second todo): agar trader_name bhi equal ho gaya
-		// to gadbad ho gayi
-	}
+	stats() : num_sold(0), num_bought(0), net_transfer(0) {}
 };
 
 struct compare_buy {
-	bool operator()(const order &a, const order &b) const {
+	bool operator()(const order &a, const order &b) const
+	{
 		if (a.price < b.price)
 			return true;
 		if (a.price > b.price)
@@ -80,7 +62,8 @@ struct compare_buy {
 };
 
 struct compare_sell {
-	bool operator()(const order &a, const order &b) const {
+	bool operator()(const order &a, const order &b) const
+	{
 		if (a.price > b.price)
 			return true;
 		if (a.price < b.price)
@@ -114,31 +97,26 @@ void market::start()
 {
 	// TODO: Update code if two (or more) lines can be the same
 
-	// // (stock name, (expiry_heap, buy_heap, sell_heap))
-	// std::unordered_map<std::string,
-                           // std::tuple<std::priority_queue<std::reference_wrapper<order>, std::vector<std::reference_wrapper<order>>, compare_buy>,
-                                      // std::priority_queue<std::reference_wrapper<order>, std::vector<std::reference_wrapper<order>>, compare_sell>,
-                                      // std::priority_queue<std::reference_wrapper<order>, std::vector<std::reference_wrapper<order>>, compare_expiry>>>
-
-			   // heaps;
-
 	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_buy>> buy_heaps;
 	std::unordered_map<std::string, std::priority_queue<order, std::vector<order>, compare_sell>> sell_heaps;
 
 	int amount = 0;
 	int num_trades = 0;
 	int num_shares = 0;
-	// std::unordered_set<trader> traders;
+	std::unordered_map<std::string, stats> statistics;
 
 	for (auto line : lines) {
 		DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
 
 		order curr;
 
+		std::string curr_stock;
 		std::string arrival_str;
 		std::string price_str;
 		std::string qty_str;
 		std::string duration_str;
+		std::string curr_type;
+		int         duration;
 
 		int  idx = -1;
 		// Get arrival time
@@ -152,35 +130,35 @@ void market::start()
 
 		// Get type
 		while (line[++idx] != ' ')
-			curr.type += line[idx];
+			curr_type += line[idx];
 
 		// Get stock
 		while (line[++idx] != '$')
-			curr.stock += line[idx];
-		curr.stock.pop_back();
+			curr_stock += line[idx];
+		curr_stock.pop_back();
 		
 		// Get linear combination
-		if (curr.stock.find(' ') != std::string::npos) {
-			curr.stock.push_back(' ');
+		if (curr_stock.find(' ') != std::string::npos) {
+			curr_stock.push_back(' ');
 			std::vector<std::string> stocks;
 			int i = -1;
 			do {
 				std::string stock_name;
 				std::string qty_str;
 
-				while (curr.stock[++i] != ' ')
-					stock_name += curr.stock[i];
-				if (curr.stock[i + 1] <= '9') {
-					while (curr.stock[++i] != ' ') 
-						qty_str += curr.stock[i];
+				while (curr_stock[++i] != ' ')
+					stock_name += curr_stock[i];
+				if (curr_stock[i + 1] <= '9') {
+					while (curr_stock[++i] != ' ') 
+						qty_str += curr_stock[i];
 				}
 
 				stocks.push_back(stock_name + qty_str);
-			} while (i < curr.stock.size() - 1);
-			curr.stock = "";
+			} while (i < curr_stock.size() - 1);
+			curr_stock = "";
 			std::sort(stocks.begin(), stocks.end());
 			for (auto stock : stocks)
-				curr.stock += stock;
+				curr_stock += stock;
 		}
 
 		while (line[++idx] != ' ')
@@ -195,57 +173,31 @@ void market::start()
 
 		// Get duration
 		idx++;
-		while (line[idx] != '\r' && line[idx] != '\n')
+		while (line[idx] != '\r' && line[idx] != '\n' &&
+		       line[idx] != '!')
 			duration_str += line[idx++];
-		curr.duration = std::stoi(duration_str);
-		if (curr.duration == -1) {
-			curr.duration = INT_MAX;
+		duration = std::stoi(duration_str);
+		if (duration == -1) {
 			curr.expiry = INT_MAX;
 		} else {
-			curr.expiry = curr.arrival + curr.duration;
+			curr.expiry = curr.arrival + duration;
 		}
 		
 		DEBUG_MSG(line << '\n');
 		DEBUG_MSG("Arrival time: " << curr.arrival);
-		DEBUG_MSG("\tDuration: " << curr.duration);
+		DEBUG_MSG("\tDuration: " << duration);
 		DEBUG_MSG("\tExpiry time: " << curr.expiry << '\n');
 		DEBUG_MSG("Trader: " << curr.trader_name);
-		DEBUG_MSG("\tStock: " << curr.stock << '\n');
+		DEBUG_MSG("\tStock: " << curr_stock << '\n');
 		DEBUG_MSG("Amount: " << curr.price);
 		DEBUG_MSG("\tQuantity: " << curr.quantity << '\n');
 
-		// for (auto it : heaps) {
-		// 	while (std::get<0>(it.second).top().get().arrival < curr.arrival) {
-		// 		std::get<0>(it.second).top().get().alive = false;
-		// 		std::get<0>(it.second).pop();
-		// 	}
-		// }
-
-		// switch (curr.type[0]) {
-		// case 'B':
-		// 	while (std::get<2>(heaps[curr.stock]).top().get().price <= curr.price) {
-		// 		if (std::get<2>(heaps[curr.stock]).top().get().quantity > curr.quantity) {
-		// 			std::get<2>(heaps[curr.stock]).top().get().quantity -= curr.quantity;
-		// 			break;
-		// 		}
-		// 	}
-		// 	break;
-		// case 'S':
-		// 	break;
-		// }
-
-		if (curr.type[0] == 'B') {
-			auto &heap = sell_heaps[curr.stock];
-			if (heap.empty()) {
-				buy_heaps[curr.stock].push(curr);
-				continue;
-			}
+		if (curr_type[0] == 'B') {
+			auto &heap = sell_heaps[curr_stock];
 			int alive = true;
-			while (heap.top().price <= curr.price) {
-				if (heap.empty())
-					break;
+			while (!heap.empty() && heap.top().price <= curr.price) {
 				if (heap.top().expiry < curr.arrival) {
-					DEBUG_MSG("Popped from " << curr.stock << " sell heap: "
+					DEBUG_MSG("Popped from " << curr_stock << " sell heap: "
 					       << heap.top().trader_name << " $"
 					       << heap.top().price << " #"
 					       << heap.top().quantity << "\n");
@@ -257,14 +209,18 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
+					statistics[heap.top().trader_name].num_sold += num_shares;
+					statistics[heap.top().trader_name].net_transfer += amount;
+					statistics[curr.trader_name].num_bought += num_shares;
+					statistics[curr.trader_name].net_transfer -= amount;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n";
 					auto best = heap.top();
@@ -278,14 +234,18 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
+					statistics[heap.top().trader_name].num_sold += num_shares;
+					statistics[heap.top().trader_name].net_transfer += amount;
+					statistics[curr.trader_name].num_bought += num_shares;
+					statistics[curr.trader_name].net_transfer -= amount;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n";
 					heap.pop();
@@ -296,38 +256,32 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
+					statistics[heap.top().trader_name].num_sold += num_shares;
+					statistics[heap.top().trader_name].net_transfer += amount;
+					statistics[curr.trader_name].num_bought += num_shares;
+					statistics[curr.trader_name].net_transfer -= amount;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << curr.trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n";
-					heap.pop();
 					curr.quantity -= heap.top().quantity;
-				}
-				if (heap.empty()) {
-					buy_heaps[curr.stock].push(curr);
-					break;
+					heap.pop();
 				}
 			}
 			if (alive)
-				buy_heaps[curr.stock].push(curr);
+				buy_heaps[curr_stock].push(curr);
 		} else {
-			auto &heap = buy_heaps[curr.stock];
-			if (heap.empty()) {
-				sell_heaps[curr.stock].push(curr);
-				continue;
-			}
+			auto &heap = buy_heaps[curr_stock];
 			int alive = true;
-			while (heap.top().price >= curr.price) {
-				if (heap.empty())
-					break;
+			while (!heap.empty() && heap.top().price >= curr.price) {
 				if (heap.top().expiry < curr.arrival) {
-					DEBUG_MSG("Popped from " << curr.stock << " buy heap: "
+					DEBUG_MSG("Popped from " << curr_stock << " buy heap: "
 					       << heap.top().trader_name << " $"
 					       << heap.top().price << " #"
 					       << heap.top().quantity << "\n");
@@ -339,14 +293,18 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
+					statistics[heap.top().trader_name].num_bought += num_shares;
+					statistics[heap.top().trader_name].net_transfer -= amount;
+					statistics[curr.trader_name].num_sold += num_shares;
+					statistics[curr.trader_name].net_transfer += amount;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader_name << " purchased "
 					          << curr.quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n";
 					auto best = heap.top();
@@ -360,14 +318,18 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
+					statistics[heap.top().trader_name].num_bought += num_shares;
+					statistics[heap.top().trader_name].net_transfer -= amount;
+					statistics[curr.trader_name].num_sold += num_shares;
+					statistics[curr.trader_name].net_transfer += amount;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n";
 					heap.pop();
@@ -378,26 +340,26 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
+					statistics[heap.top().trader_name].num_bought += num_shares;
+					statistics[heap.top().trader_name].net_transfer -= amount;
+					statistics[curr.trader_name].num_sold += num_shares;
+					statistics[curr.trader_name].net_transfer += amount;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					std::cout << heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
-					          << curr.stock << " from "
+					          << curr_stock << " from "
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n";
-					heap.pop();
 					curr.quantity -= heap.top().quantity;
-				}
-				if (heap.empty()) {
-					sell_heaps[curr.stock].push(curr);
-					continue;
+					heap.pop();
 				}
 			}
 			if (alive)
-				sell_heaps[curr.stock].push(curr);
+				sell_heaps[curr_stock].push(curr);
 		}
 	}
 
@@ -405,5 +367,11 @@ void market::start()
 	std::cout << "Total Amount of Money Transferred: $" << amount << '\n';
 	std::cout << "Number of Completed Trades: " << num_trades << '\n';
 	std::cout << "Number of Shares Traded: " << num_shares << '\n';
+	for (auto it : statistics) {
+		std::cout << it.first << " bought " << it.second.num_bought
+		          << " and sold " << it.second.num_sold
+			  << " for a net transfer of $" << it.second.net_transfer
+		          << '\n';
+	}
 	DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
 }
