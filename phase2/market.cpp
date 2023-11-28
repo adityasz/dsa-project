@@ -36,10 +36,6 @@ struct order {
 	int expiry;
 	int price;
 	int quantity;
-
-	bool alive;
-
-	order() : alive(true) {}
 };
 
 struct compare_expiry {
@@ -125,6 +121,9 @@ void market::start()
 	for (auto line : lines) {
 		DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
 		order curr;
+		int amount;
+		int num_trades;
+		int num_shares;
 
 		std::string arrival_str;
 		std::string price_str;
@@ -226,36 +225,52 @@ void market::start()
 		// }
 
 		if (curr.type[0] == 'B') {
-			// auto &heap = sell_heaps[curr.stock];
-			if (sell_heaps[curr.stock].empty()) {
+			auto &heap = sell_heaps[curr.stock];
+			if (heap.empty()) {
 				buy_heaps[curr.stock].push(curr);
 				continue;
 			}
 			int alive = true;
-			while (sell_heaps[curr.stock].top().price <= curr.price) {
-				if (sell_heaps[curr.stock].top().expiry < curr.arrival)
-					sell_heaps[curr.stock].pop();
-				if (sell_heaps[curr.stock].empty()) {
+			while (heap.top().price <= curr.price) {
+				if (heap.top().expiry < curr.arrival)
+					heap.pop();
+				if (heap.empty()) {
 					buy_heaps[curr.stock].push(curr);
 					break;
 				}
-				if (sell_heaps[curr.stock].top().quantity > curr.quantity) {
-					std::cout << "\n";
+				if (heap.top().quantity > curr.quantity) {
+					std::cout << curr.trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n";
+					auto best = heap.top();
+					heap.pop();
+					best.quantity -= curr.quantity;
+					heap.push(best);
 					alive = false;
 					break;
 				}
-				if (sell_heaps[curr.stock].top().quantity == curr.quantity) {
-					sell_heaps[curr.stock].pop();
-					std::cout << "\n";
+				if (heap.top().quantity == curr.quantity) {
+					std::cout << curr.trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n";
+					heap.pop();
 					alive = false;
 					break;
 				}
-				if (sell_heaps[curr.stock].top().quantity < curr.quantity) {
-					sell_heaps[curr.stock].pop();
-					curr.quantity -= sell_heaps[curr.stock].top().quantity;
-					std::cout << "\n";
+				if (heap.top().quantity < curr.quantity) {
+					std::cout << curr.trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << heap.top().trader << " for $"
+					          << heap.top().price << "/share\n";
+					heap.pop();
+					curr.quantity -= heap.top().quantity;
 				}
-				if (sell_heaps[curr.stock].empty()) {
+				if (heap.empty()) {
 					buy_heaps[curr.stock].push(curr);
 					break;
 				}
@@ -263,36 +278,52 @@ void market::start()
 			if (alive)
 				buy_heaps[curr.stock].push(curr);
 		} else {
-			// auto &buy_heaps[curr.stock] = buy_heaps[curr.stock];
-			if (buy_heaps[curr.stock].empty()) {
+			auto &heap = buy_heaps[curr.stock];
+			if (heap.empty()) {
 				sell_heaps[curr.stock].push(curr);
 				continue;
 			}
 			int alive = true;
-			while (buy_heaps[curr.stock].top().price >= curr.price) {
-				if (buy_heaps[curr.stock].top().expiry < curr.arrival)
-					buy_heaps[curr.stock].pop();
-				if (buy_heaps[curr.stock].empty()) {
+			while (heap.top().price >= curr.price) {
+				if (heap.top().expiry < curr.arrival)
+					heap.pop();
+				if (heap.empty()) {
 					sell_heaps[curr.stock].push(curr);
 					break;
 				}
-				if (buy_heaps[curr.stock].top().quantity > curr.quantity) {
-					std::cout << "\n";
+				if (heap.top().quantity > curr.quantity) {
+					std::cout << heap.top().trader << " purchased "
+					          << curr.quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n";
+					auto best = heap.top();
+					heap.pop();
+					best.quantity -= curr.quantity;
+					heap.push(best);
 					alive = false;
 					break;
 				}
-				if (buy_heaps[curr.stock].top().quantity == curr.quantity) {
-					buy_heaps[curr.stock].pop();
-					std::cout << "\n";
+				if (heap.top().quantity == curr.quantity) {
+					std::cout << heap.top().trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n";
+					heap.pop();
 					alive = false;
 					break;
 				}
-				if (buy_heaps[curr.stock].top().quantity < curr.quantity) {
-					buy_heaps[curr.stock].pop();
-					curr.quantity -= buy_heaps[curr.stock].top().quantity;
-					std::cout << "\n";
+				if (heap.top().quantity < curr.quantity) {
+					std::cout << heap.top().trader << " purchased "
+					          << heap.top().quantity << " share of "
+					          << curr.stock << " from "
+					          << curr.trader << " for $"
+					          << heap.top().price << "/share\n";
+					heap.pop();
+					curr.quantity -= heap.top().quantity;
 				}
-				if (buy_heaps[curr.stock].empty()) {
+				if (heap.empty()) {
 					sell_heaps[curr.stock].push(curr);
 					continue;
 				}
