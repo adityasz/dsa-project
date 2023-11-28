@@ -3,29 +3,30 @@
 #include "stl/climits"
 #include "stl/queue"
 #include "stl/unordered_set"
+#include "stl/algorithm"
 
-#ifdef DEBUG
-#include <chrono>
-#define DEBUG_MSG(x)        std::cerr << x
-#define __get_time(x)       auto x = std::chrono::steady_clock::now()
-#define __duration(t, x, y) auto t = std::chrono::duration<double, std::milli> (y - x).count()
-#define __print_vector(v)                                                      \
-        do {                                                                   \
-        	int __idx__ = 0;                                               \
-        	for (auto x : v) {                                             \
-        		if (__idx__++ > 8) {                                   \
-        			DEBUG_MSG("...\n");                            \
-        			break;                                         \
-        		}                                                      \
-        		DEBUG_MSG(x << ' ');                                   \
-        	}                                                              \
-        } while (0)
-#else
+// #ifdef DEBUG
+// #include <chrono>
+// #define DEBUG_MSG(x)        std::cerr << x
+// #define __get_time(x)       auto x = std::chrono::steady_clock::now()
+// #define __duration(t, x, y) auto t = std::chrono::duration<double, std::milli> (y - x).count()
+// #define __print_vector(v)                                                      \
+//         do {                                                                   \
+//         	int __idx__ = 0;                                               \
+//         	for (auto x : v) {                                             \
+//         		if (__idx__++ > 8) {                                   \
+//         			DEBUG_MSG("...\n");                            \
+//         			break;                                         \
+//         		}                                                      \
+//         		DEBUG_MSG(x << ' ');                                   \
+//         	}                                                              \
+//         } while (0)
+// #else
 #define DEBUG_MSG(x)         do {} while (0)
 #define __get_time(x)        do {} while (0)
 #define __duration(t, x, y)  do {} while (0)
 #define __print_vector(v)    do {} while (0)
-#endif
+// #endif
 
 struct order {
 	std::string trader_name;
@@ -106,6 +107,7 @@ void market::start()
 	std::unordered_map<std::string, stats> statistics;
 
 	for (auto line : lines) {
+		__get_time(start);
 		DEBUG_MSG("──────────────────────────────────────────────────────────────────────\n");
 		DEBUG_MSG(line << '\n');
 
@@ -363,6 +365,9 @@ void market::start()
 			if (alive)
 				sell_heaps[curr_stock].push(curr);
 		}
+		__get_time(end);
+		__duration(diff, start, end);
+		DEBUG_MSG(diff << " s\n");
 	}
 
 	std::cout << "---End of day---\n";
