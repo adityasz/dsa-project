@@ -90,7 +90,7 @@ struct compare_sell {
 
 int reader(int time)
 {
-	int t = commonTimer.load();
+	// int t = commonTimer.load();
 	// std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 	// std::string apna_naam = "22B0056_22B0636";
@@ -214,6 +214,9 @@ int reader(int time)
 					       << heap.top().quantity << "\n");
 					DEBUG_MSG("Reason: expired\n");
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						buy_orders.erase(curr_stock);
+					}
 					heap.pop();
 					continue;
 				}
@@ -227,6 +230,9 @@ int reader(int time)
 					          << heap.top().price << "/share\n");
 					auto best = heap.top();
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						buy_orders.erase(curr_stock);
+					}
 					heap.pop();
 					best.quantity -= curr.quantity;
 					heap.push(best);
@@ -242,6 +248,9 @@ int reader(int time)
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						buy_orders.erase(curr_stock);
+					}
 					heap.pop();
 					alive = false;
 					break;
@@ -255,6 +264,9 @@ int reader(int time)
 					          << heap.top().trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					curr.quantity -= heap.top().quantity;
+					if (heap.top().trader_name == apna_naam) {
+						buy_orders.erase(curr_stock);
+					}
 					heap.pop();
 				}
 			}
@@ -271,6 +283,9 @@ int reader(int time)
 					       << heap.top().quantity << "\n");
 					DEBUG_MSG("Reason: expired\n");
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						sell_orders.erase(curr_stock);
+					}
 					heap.pop();
 					continue;
 				}
@@ -284,6 +299,9 @@ int reader(int time)
 					          << heap.top().price << "/share\n");
 					auto best = heap.top();
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						sell_orders.erase(curr_stock);
+					}
 					heap.pop();
 					best.quantity -= curr.quantity;
 					heap.push(best);
@@ -299,6 +317,9 @@ int reader(int time)
 					          << curr.trader_name << " for $"
 					          << heap.top().price << "/share\n");
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						sell_orders.erase(curr_stock);
+					}
 					heap.pop();
 					alive = false;
 					break;
@@ -313,6 +334,9 @@ int reader(int time)
 					          << heap.top().price << "/share\n");
 					curr.quantity -= heap.top().quantity;
 					// TODO: remove apne order
+					if (heap.top().trader_name == apna_naam) {
+						sell_orders.erase(curr_stock);
+					}
 					heap.pop();
 				}
 			}
@@ -374,31 +398,56 @@ sell:
 		__duration(diff, start, end);
 		DEBUG_MSG(diff << " s\n");
 
+		for (auto asdf : new_buy_orders) {
+			DEBUG_MSG(curr.arrival << " " << apna_naam << " BUY "
+				  << asdf.second << " $" << asdf.first.price
+				  << " #" << asdf.first.quantity
+				  << ' ' << asdf.first.expiry - curr.arrival << '\n');
+		}
+		for (auto asdf : new_sell_orders) {
+			DEBUG_MSG(curr.arrival << " " << apna_naam << " SELL "
+				  << asdf.second << " $" << asdf.first.price
+				  << " #" << asdf.first.quantity
+				  << ' ' << asdf.first.expiry - curr.arrival << '\n');
+		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(515));
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-			t = commonTimer.load();
 			std::lock_guard<std::mutex> lock(printMutex);
+			int t = commonTimer.load();
+
+			if (!std::getline(inputFile, line))
+				break;			
 
 			for (auto asdf : new_buy_orders) {
 				std::cout << t << " " << apna_naam << " BUY "
-				          << asdf.second << " $" << asdf.first.price
-				          << " #" << asdf.first.quantity
-				          << ' ' << asdf.first.expiry - curr.arrival << '\n';
+					  << asdf.second << " $" << asdf.first.price
+					  << " #" << asdf.first.quantity
+					  << ' ' << asdf.first.expiry - curr.arrival << '\n';
 			}
 			for (auto asdf : new_sell_orders) {
 				std::cout << t << " " << apna_naam << " SELL "
-				          << asdf.second << " $" << asdf.first.price
-				          << " #" << asdf.first.quantity
-				          << ' ' << asdf.first.expiry - curr.arrival << '\n';
+					  << asdf.second << " $" << asdf.first.price
+					  << " #" << asdf.first.quantity
+					  << ' ' << asdf.first.expiry - curr.arrival << '\n';
 			}
 		}
+		// { // from worker.cpp
+		// 	std::lock_guard<std::mutex> lock(printMutex);
+		// 	currentTime = commonTimer.load();
+
+		// 	// Increment the shared timer
+		// 	if (thread_id == 1)
+		// 	commonTimer.fetch_add(1);
+			
+		// 	std::string str;
+		// 	if (!std::getline(inputFile, line))
+		// 		break;			
+		// 	std::cout << currentTime << " " << line << std::endl;
+		// }
+
 	}
 
-	// {
-	// 	t = commonTimer.load();
-	// 	std::lock_guard<std::mutex> lock(printMutex);
-	// 	std::cout << t << " 22B0056_22B0636 SELL AMD $1 #32 3\r\n";
-	// }
 	return 1;
 }
 

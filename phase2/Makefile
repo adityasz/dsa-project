@@ -6,7 +6,7 @@ all: trader
 
 # For part1: marked with a blank trader
 market: main.cpp market.cpp worker.cpp blank_trader.cpp
-	g++ -std=c++20 main.cpp market.cpp worker.cpp blank_trader.cpp -lpthread -o market.o -DDEBUG
+	g++ -std=c++20 main.cpp market.cpp worker.cpp blank_trader.cpp -lpthread -o market.o #-DDEBUG
 	./market.o 2 > output.txt
 	cat output.txt
 
