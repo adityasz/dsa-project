@@ -209,10 +209,10 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
-					statistics[heap.top().trader_name].num_sold += num_shares;
-					statistics[heap.top().trader_name].net_transfer += amount;
-					statistics[curr.trader_name].num_bought += num_shares;
-					statistics[curr.trader_name].net_transfer -= amount;
+					statistics[heap.top().trader_name].num_sold += curr.quantity;
+					statistics[heap.top().trader_name].net_transfer += heap.top().price * curr.quantity;
+					statistics[curr.trader_name].num_bought += curr.quantity;
+					statistics[curr.trader_name].net_transfer -= heap.top().price * curr.quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -234,10 +234,10 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
-					statistics[heap.top().trader_name].num_sold += num_shares;
-					statistics[heap.top().trader_name].net_transfer += amount;
-					statistics[curr.trader_name].num_bought += num_shares;
-					statistics[curr.trader_name].net_transfer -= amount;
+					statistics[heap.top().trader_name].num_sold += curr.quantity;
+					statistics[heap.top().trader_name].net_transfer += heap.top().price * curr.quantity;
+					statistics[curr.trader_name].num_bought += curr.quantity;
+					statistics[curr.trader_name].net_transfer -= heap.top().price * curr.quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -256,10 +256,10 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
-					statistics[heap.top().trader_name].num_sold += num_shares;
-					statistics[heap.top().trader_name].net_transfer += amount;
-					statistics[curr.trader_name].num_bought += num_shares;
-					statistics[curr.trader_name].net_transfer -= amount;
+					statistics[heap.top().trader_name].num_sold += heap.top().quantity;
+					statistics[heap.top().trader_name].net_transfer += heap.top().price * heap.top().quantity;
+					statistics[curr.trader_name].num_bought += heap.top().quantity;
+					statistics[curr.trader_name].net_transfer -= heap.top().price * heap.top().quantity;
 					DEBUG_MSG(curr.trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
@@ -293,10 +293,10 @@ void market::start()
 					amount += heap.top().price * curr.quantity;
 					num_trades++;
 					num_shares += curr.quantity;
-					statistics[heap.top().trader_name].num_bought += num_shares;
-					statistics[heap.top().trader_name].net_transfer -= amount;
-					statistics[curr.trader_name].num_sold += num_shares;
-					statistics[curr.trader_name].net_transfer += amount;
+					statistics[heap.top().trader_name].num_bought += curr.quantity;
+					statistics[heap.top().trader_name].net_transfer -= heap.top().price * curr.quantity;
+					statistics[curr.trader_name].num_sold += curr.quantity;
+					statistics[curr.trader_name].net_transfer += heap.top().price * curr.quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << curr.quantity << " share of "
 					          << curr_stock << " from "
@@ -318,10 +318,10 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
-					statistics[heap.top().trader_name].num_bought += num_shares;
-					statistics[heap.top().trader_name].net_transfer -= amount;
-					statistics[curr.trader_name].num_sold += num_shares;
-					statistics[curr.trader_name].net_transfer += amount;
+					statistics[heap.top().trader_name].num_bought += heap.top().quantity;
+					statistics[heap.top().trader_name].net_transfer -= heap.top().price * heap.top().quantity;
+					statistics[curr.trader_name].num_sold += heap.top().quantity;
+					statistics[curr.trader_name].net_transfer += heap.top().price * heap.top().quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
@@ -340,10 +340,10 @@ void market::start()
 					amount += heap.top().price * heap.top().quantity;
 					num_trades++;
 					num_shares += heap.top().quantity;
-					statistics[heap.top().trader_name].num_bought += num_shares;
-					statistics[heap.top().trader_name].net_transfer -= amount;
-					statistics[curr.trader_name].num_sold += num_shares;
-					statistics[curr.trader_name].net_transfer += amount;
+					statistics[heap.top().trader_name].num_bought += heap.top().quantity;
+					statistics[heap.top().trader_name].net_transfer -= heap.top().price * heap.top().quantity;
+					statistics[curr.trader_name].num_sold += heap.top().quantity;
+					statistics[curr.trader_name].net_transfer += heap.top().price * heap.top().quantity;
 					DEBUG_MSG(heap.top().trader_name << " purchased "
 					          << heap.top().quantity << " share of "
 					          << curr_stock << " from "
